@@ -23,21 +23,26 @@ remove_listener() {
   set_desktop_option $desktop 'pid'    "";
 }
 
-start_listener() {
-  layout=$1;
-  selected_desktop=$2;
-  layout_file="$LAYOUTS/$layout.sh";
-
-  # Default layout removes any other listener
-  [[ "$layout" == "default" ]] && remove_listener "$selected_desktop" && exit 0;
+run_layout() {
+  local layout_file="$LAYOUTS/$1.sh";
 
   # Check if layout exists
   [[ ! -f $layout_file ]] && echo "Layout does not exist" && exit 1;
 
+  bash -c "$layout_file";
+}
+
+start_listener() {
+  layout=$1;
+  selected_desktop=$2;
+
+  # Default layout removes any other listener
+  [[ "$layout" == "default" ]] && remove_listener "$selected_desktop" && exit 0;
+
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
 
-  recalculate_layout() { bash -c "$layout_file"; }
+  recalculate_layout() { run_layout $layout; }
 
   # Recalculate styles as soon as they are set
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;
@@ -74,7 +79,7 @@ action=$1; shift;
 
 case "$action" in
   reload)     reload_layouts ;;
-  once)       $LAYOUTS/$1 ;;
+  once)       run_layout "$1" ;;
   set)        start_listener "$@" ;;
   get)        get_desktop_options "$1" ;;
   remove)     remove_listener "$1" ;;
