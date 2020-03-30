@@ -26,7 +26,7 @@ remove_listener() {
 run_layout() {
   local layout_file="$LAYOUTS/$1.sh";
 
-  # Check if layout exists
+  # GUARD: Check if layout exists
   [[ ! -f $layout_file ]] && echo "Layout does not exist" && exit 1;
 
   bash -c "$layout_file";
@@ -44,7 +44,7 @@ start_listener() {
 
   recalculate_layout() { run_layout $layout; }
 
-  # Recalculate styles as soon as they are set
+  # Recalculate styles as soon as they are set if it is on the selected desktop
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;
 
   # Then listen to node additions and recalculate as required
@@ -84,12 +84,12 @@ case "$action" in
   get)        get_desktop_options "$1" ;;
   remove)     remove_listener "$1" ;;
   layouts)    echo "default"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
-  reset-all)
-    ps aux | \
-      grep "bspc subscribe" | \
-      grep -v grep | \
-      awk '{print $2}' | \
-      xargs kill;
-  ;;
+  # reset-all)
+    # ps aux | \
+      # grep "bspc subscribe" | \
+      # grep -v grep | \
+      # awk '{print $2}' | \
+      # xargs kill;
+  # ;;
   *) echo "Usage: layout.sh [set <layout> <desktop-name>|get <desktop-name>|remove]" ;;
 esac
