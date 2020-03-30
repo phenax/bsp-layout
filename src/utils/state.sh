@@ -1,6 +1,4 @@
-ROOT="$HOME/.config/bspwm";
-
-DESKTOP_STATE="$ROOT/state/desktops";
+DESKTOP_STATE="/tmp/bsp-layout.state.XXXXX/desktops";
 
 # (Data ->) :: Key -> Value -> Data
 append_option() { sed "/^$1:/d"; echo "$1:$2"; }

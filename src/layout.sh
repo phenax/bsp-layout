@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROOT="$HOME/.config/bspwm";
+ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/state.sh";
 
@@ -37,7 +37,7 @@ start_listener() {
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
 
-  recalculate_layout() { "$layout_file"; }
+  recalculate_layout() { bash -c "$layout_file"; }
 
   # Recalculate styles as soon as they are set
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;
@@ -73,11 +73,12 @@ reload_layouts() {
 action=$1; shift;
 
 case "$action" in
-  reload) reload_layouts ;;
-  set) start_listener "$@" ;;
-  get) get_desktop_options "$1" ;;
-  remove) remove_listener "$1" ;;
-  layouts) echo "default"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
+  reload)     reload_layouts ;;
+  once)       $LAYOUTS/$1 ;;
+  set)        start_listener "$@" ;;
+  get)        get_desktop_options "$1" ;;
+  remove)     remove_listener "$1" ;;
+  layouts)    echo "default"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
   reset-all)
     ps aux | \
       grep "bspc subscribe" | \
