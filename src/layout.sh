@@ -6,6 +6,16 @@ source "$ROOT/utils/state.sh";
 
 LAYOUTS="$ROOT/layouts";
 
+HELP_TEXT="
+Usage: bsp-layout command [args]
+
+Commands:
+  set <layout> [desktop_selector]      - Will apply the layout to the selected desktop
+  once <layout>                        - Will apply the layout on the current set of nodes
+  remove <desktop_selector>            - Will disable the layout
+  layouts                              - Will list all available layouts
+";
+
 # Kill old layout process
 kill_layout() {
   old_pid="$(get_desktop_options "$1" | valueof pid)";
@@ -91,5 +101,6 @@ case "$action" in
       # awk '{print $2}' | \
       # xargs kill;
   # ;;
-  *) echo "Usage: layout.sh [set <layout> <desktop-name>|get <desktop-name>|remove]" ;;
+  help) echo -e "$HELP_TEXT" ;;
+  *) echo -e "$HELP_TEXT" && exit 1 ;;
 esac
