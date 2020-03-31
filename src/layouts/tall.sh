@@ -38,7 +38,7 @@ execute_layout() {
   rotate '@/2' horizontal 90;
 
   local stack_node=$(bspc query -N '@/2' -n);
-  for parent in $(bspc query -N '@/2' -n .descendant_of.!window.$node_filter | grep -v "$stack_node"); do
+  for parent in $(bspc query -N '@/2' -n .descendant_of.!window.$node_filter | grep -v $stack_node); do
     rotate $parent horizontal 90;
   done
 
@@ -46,9 +46,10 @@ execute_layout() {
 
   local mon_width=$(jget width "$(bspc query -T -m)");
 
-  local want=$(echo "$master_size * $mon_width" | bc -l | sed 's/\..*//');
+  local want=$(echo "$master_size * $mon_width" | bc | sed 's/\..*//');
   local have=$(jget width "$(bspc query -T -n '@/1')");
-  bspc node "@/1.descendant_of.!window.$node_filter" --resize right $((want - have)) 0;
+
+  bspc node "@/1.descendant_of.window.$node_filter" --resize right $((want - have)) 0;
 }
 
 execute_layout;
