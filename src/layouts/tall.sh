@@ -47,6 +47,7 @@ execute_layout() {
 
   local want=$(echo "$master_size * $mon_width" | bc -l | sed 's/\..*//');
   local have=$(jget width "$(bspc query -T -n '@/1')");
+
   bspc node "@/1.descendant_of.!window.$node_filter" --resize right $((want - have)) 0;
 }
 
