@@ -57,7 +57,7 @@ start_listener() {
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
 
-  recalculate_layout() { run_layout $layout; }
+  recalculate_layout() { run_layout $layout 2> /dev/null || true; }
 
   # Recalculate styles as soon as they are set if it is on the selected desktop
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;

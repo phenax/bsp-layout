@@ -54,4 +54,4 @@ execute_layout() {
   bspc node "@/1.descendant_of.window.$node_filter" --resize bottom 0 $((want - have));
 }
 
-execute_layout;
+execute_layout "$@";
