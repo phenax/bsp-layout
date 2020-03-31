@@ -1,4 +1,4 @@
-DESKTOP_STATE="/tmp/bsp-layout.state.XXXXX/desktops";
+DESKTOP_STATE="/tmp/bsp-layout.state/desktops";
 
 # (Data ->) :: Key -> Value -> Data
 append_option() { sed "/^$1:/d"; echo "$1:$2"; }

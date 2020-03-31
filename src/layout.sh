@@ -95,7 +95,7 @@ case "$action" in
   reload)     reload_layouts ;;
   once)       run_layout "$1" ;;
   set)        start_listener "$@" ;;
-  get)        get_desktop_options "$1" ;;
+  get)        layout=$(get_desktop_options "$1" | valueof layout); echo "${layout:-"default"}" ;;
   remove)     remove_listener "$1" ;;
   layouts)    echo "default"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
   help)       echo -e "$HELP_TEXT" ;;

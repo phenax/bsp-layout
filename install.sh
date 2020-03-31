@@ -38,6 +38,6 @@ echo "Creating binary..." &&
 ln -s $INSTALL_DIR/layout.sh $BINARY &&
 
 # Remove clone directory
-rm -rf $TMP_DIR;
+rm -rf $TMP_DIR &&
 
 echo "Installed bsp-layout";
