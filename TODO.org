@@ -1,10 +1,12 @@
 * Tasks
-** TODO Install script
-   - [X] Initialize config if it doesn't exist
-   - [X] Install executables and source files
-   - [X] Symlink layout.sh to /usr/local/bin
 ** TODO Config
    - [ ] Runtime changes will be saved seperately and will not be persist
      accross reloads
    - [ ] Add disable all layouts command
    - [ ] Load layout specific config
+** TODO Documentation
+   - [ ] Add manpage entry
+   - [ ] Document all commands in readme
+** TODO Layouts
+   - [ ] Fix grid layout
+   - [ ] Centered stack layout
