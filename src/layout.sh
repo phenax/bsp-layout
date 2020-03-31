@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 VERSION="0.0.1";
 
@@ -50,7 +50,7 @@ start_listener() {
   layout=$1;
   selected_desktop=$2;
 
-  # Default layout removes any other listener
+  # GUARD: Default layout removes any other listener
   [[ "$layout" == "default" ]] && remove_listener "$selected_desktop" && exit 0;
 
   # Set selected desktop to currently focused desktop if option is not specified

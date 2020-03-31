@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# a stack layout for bspwm
 
 master_size=.60
 
-ROOT="$HOME/.config/bspwm";
+ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/common.sh";
 source "$ROOT/utils/layout.sh";
 
@@ -52,4 +51,3 @@ execute_layout() {
 }
 
 execute_layout;
-# bspc subscribe node_{remove,add} | while read _; do execute_layout; done
