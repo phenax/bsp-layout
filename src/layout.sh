@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERSION="0.0.1";
+
 ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/state.sh";
@@ -14,6 +16,8 @@ Commands:
   once <layout>                        - Will apply the layout on the current set of nodes
   remove <desktop_selector>            - Will disable the layout
   layouts                              - Will list all available layouts
+  version                              - Displays the version number of the tool
+  help                                 - See this help menu
 ";
 
 # Kill old layout process
@@ -94,13 +98,7 @@ case "$action" in
   get)        get_desktop_options "$1" ;;
   remove)     remove_listener "$1" ;;
   layouts)    echo "default"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
-  # reset-all)
-    # ps aux | \
-      # grep "bspc subscribe" | \
-      # grep -v grep | \
-      # awk '{print $2}' | \
-      # xargs kill;
-  # ;;
-  help) echo -e "$HELP_TEXT" ;;
-  *) echo -e "$HELP_TEXT" && exit 1 ;;
+  help)       echo -e "$HELP_TEXT" ;;
+  version)    echo "$VERSION" ;;
+  *)          echo -e "$HELP_TEXT" && exit 1 ;;
 esac
