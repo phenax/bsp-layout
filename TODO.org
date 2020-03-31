@@ -1,15 +1,16 @@
 * Tasks
 ** General
+   - [X] FIX: Tall/Wide layout constant root node issue
    - [ ] Use desktop ids instead of names while saving state
    - [ ] Generalize bspwm default layouts into this
-   - [X] FIX: Tall/Wide layout constant root node issue
    - [ ] Allow configuring where new nodes that spawn will go (New master or not)
-** Optimizations
+** Optimizations & cleanup
    - [ ] Just spawn one process that manages all desktops
+   - [ ] Clean up code duplication with tall and wide layouts
 ** Config
    - [X] Runtime changes will be saved seperately and will not be persist
-   - [ ] Add disable all layouts command
    - [X] Load layout specific config
+   - [ ] Add disable all layouts command
 ** Documentation
    - [ ] Add manpage entry
    - [ ] Document all commands in readme

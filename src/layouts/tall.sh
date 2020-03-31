@@ -32,6 +32,8 @@ execute_layout() {
     for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $root); do
       bspc node "$wid" -n '@/2';
     done
+
+    bspc node "$root" -n '@/1';
   fi
 
   rotate '@/' vertical 90;
