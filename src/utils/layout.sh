@@ -7,7 +7,7 @@ rotate() {
   angle=$3;
 
   if [[ ! "$have" = "$want" ]]; then
-    vdo bspc node "$node" -R "$3";
+    bspc node "$node" -R "$3";
   fi
 }
 

@@ -27,18 +27,18 @@ execute_layout() {
 
     # move everything into 2 that is not our new_master
     for wid in $(bspc query -N '@/1' -n .descendant_of.window.!hidden | grep -v $new_master); do
-      vdo bspc node "$wid" -n '@/2'
+      bspc node "$wid" -n '@/2'
     done
 
-    vdo bspc node "$new_master" -n '@/1'
+    bspc node "$new_master" -n '@/1'
   fi
 
-  vdo rotate '@/' horizontal 90
-  vdo rotate '@/2' vertical 90
+  rotate '@/' horizontal 90
+  rotate '@/2' vertical 90
 
   stack_node=$(bspc query -N '@/2' -n)
   for parent in $(bspc query -N '@/2' -n '.descendant_of.!window.!hidden' | grep -v $stack_node); do
-    vdo rotate $parent vertical 90
+    rotate $parent vertical 90
   done
 
   auto_balance '@/2';
