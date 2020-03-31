@@ -3,6 +3,7 @@ Manage layouts in bspwm (tall and wide)
 
 [BSPWM](https://github.com/baskerville/bspwm) does one thing and it does it well. It is a window manager. But some workflows require layout management to some extent. `bsp-layout` fills that gap.
 
+
 ### Installation
 ```bash
 curl https://github.com/phenax/bsp-layout/blob/master/install.sh | sudo sh -;
@@ -26,6 +27,21 @@ _______________
 |             |
 |_____________|
 |____|____|___|
+```
+
+* `even` - Evenly balance all windows
+```
+_______________
+|___|____|____|
+|___|____|____|
+|___|____|____|
+
+OR
+_______________
+|    |        |
+|    |________|
+|    |        |
+|____|________|
 ```
 
 
