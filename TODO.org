@@ -8,5 +8,5 @@
    - [ ] Add manpage entry
    - [ ] Document all commands in readme
 ** TODO Layouts
-   - [ ] Fix grid layout
+   - [ ] Grid layout
    - [ ] Centered stack layout
