@@ -11,26 +11,27 @@ node_filter="!hidden";
 
 execute_layout() {
   # ensure the count of the master child is 1, or make it so
-  local win_count=$(bspc query -N '@/1' -n .descendant_of.window.$node_filter | wc -l);
+  local nodes=$(bspc query -N '@/1' -n .descendant_of.window.$node_filter);
+  local win_count=$(echo "$nodes" | wc -l);
 
   if [ $win_count -ne 1 ]; then
-    local new_master="";
+    local new_node="";
     if [ -z "$*" ]; then
-      new_master=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1);
+      new_node=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1);
     else
-      new_master=$*;
+      new_node=$*;
     fi
 
-    if [ -z "$new_master" ]; then
-      new_master=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1);
+    if [ -z "$new_node" ]; then
+      new_node=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1);
     fi
 
-    # move everything into 2 that is not our new_master
-    # for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $new_master); do
-      # bspc node "$wid" -n '@/2'
-    # done
+    local root=$(echo "$nodes" | head -n 1);
 
-    bspc node "$new_master" -n '@/2';
+    # move everything into 2 that is not our new_node
+    for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $root); do
+      bspc node "$wid" -n '@/2';
+    done
   fi
 
   rotate '@/' horizontal 90;
