@@ -1,6 +1,6 @@
 * Tasks
 ** TODO Install script
-   - [ ] Initialize config if it doesn't exist
+   - [X] Initialize config if it doesn't exist
    - [X] Install executables and source files
    - [X] Symlink layout.sh to /usr/local/bin
 ** TODO Config
