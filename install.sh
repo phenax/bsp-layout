@@ -30,6 +30,8 @@ mkdir -p "$CONFIG_DIR";
 echo "Copying files..." &&
 mkdir -p $INSTALL_DIR &&
 cp -r src/* $INSTALL_DIR/ &&
+chmod +x $INSTALL_DIR/layouts/*.sh &&
+chmod +x $INSTALL_DIR/layout.sh &&
 
 # Create binary executable
 echo "Creating binary..." &&
