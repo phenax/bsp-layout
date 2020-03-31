@@ -1,10 +1,10 @@
 * Tasks
 ** TODO Install script
    - [ ] Initialize config if it doesn't exist
-   - [ ] Install executables and source files
-   - [ ] Symlink layout.sh to /usr/local/bin
+   - [X] Install executables and source files
+   - [X] Symlink layout.sh to /usr/local/bin
 ** TODO Config
-   - [ ] Add ability to configure load time layouts.
    - [ ] Runtime changes will be saved seperately and will not be persist
      accross reloads
-   - [ ] Reload will load config layout
+   - [ ] Add disable all layouts command
+   - [ ] Load layout specific config
