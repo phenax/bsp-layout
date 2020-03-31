@@ -1,12 +1,21 @@
 * Tasks
-** TODO Config
+** General
+   - [ ] Use desktop ids instead of names while saving state
+   - [ ] Generalize bspwm default layouts into this
+   - [ ] Allow configuring where new nodes that spawn will go (New master or not)
+** Optimizations
+   - [ ] Just spawn one process that manages all desktops
+** Config
    - [ ] Runtime changes will be saved seperately and will not be persist
      accross reloads
    - [ ] Add disable all layouts command
    - [ ] Load layout specific config
-** TODO Documentation
+** Documentation
    - [ ] Add manpage entry
    - [ ] Document all commands in readme
-** TODO Layouts
+** Layouts
    - [ ] Grid layout
    - [ ] Centered stack layout
+   - [ ] All floating
+   - [ ] Monocle
+   - [ ] Tiled (instead of default)

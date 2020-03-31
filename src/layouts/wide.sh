@@ -1,31 +1,34 @@
 #!/usr/bin/env bash
 
-master_size=.60
-
 ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/common.sh";
 source "$ROOT/utils/layout.sh";
+source "$ROOT/utils/config.sh";
+
+master_size=$WIDE_RATIO;
+
+node_filter="!hidden";
 
 execute_layout() {
   # ensure the count of the master child is 1, or make it so
-  win_count=$(bspc query -N '@/1' -n .descendant_of.window.!hidden | wc -l)
+  win_count=$(bspc query -N '@/1' -n .descendant_of.window.$node_filter | wc -l)
   echo "win_count: $win_count"
 
   if [ $win_count -ne 1 ]; then
     if [ -z "$*" ]; then
-      new_master=$(bspc query -N '@/1' -n last.descendant_of.window.!hidden | head -n 1)
+      new_master=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1)
     else
       new_master=$*
     fi
 
     if [ -z "$new_master" ]; then
-      new_master=$(bspc query -N '@/2' -n last.descendant_of.window.!hidden | head -n 1)
+      new_master=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1)
     fi
 
     echo "new master: $new_master"
 
     # move everything into 2 that is not our new_master
-    for wid in $(bspc query -N '@/1' -n .descendant_of.window.!hidden | grep -v $new_master); do
+    for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $new_master); do
       bspc node "$wid" -n '@/2'
     done
 
@@ -36,7 +39,7 @@ execute_layout() {
   rotate '@/2' vertical 90
 
   stack_node=$(bspc query -N '@/2' -n)
-  for parent in $(bspc query -N '@/2' -n '.descendant_of.!window.!hidden' | grep -v $stack_node); do
+  for parent in $(bspc query -N '@/2' -n .descendant_of.!window.$node_filter | grep -v $stack_node); do
     rotate $parent vertical 90
   done
 
@@ -47,7 +50,7 @@ execute_layout() {
   want=$(echo "$master_size * $mon_height" | bc | sed 's/\..*//')
   have=$(jget height "$(bspc query -T -n '@/1')");
   echo "$want - $have = $((want - have))";
-  bspc node 'any.window.!hidden' --resize bottom 0 $((want - have))
+  bspc node "@/1.window.$node_filter" --resize bottom 0 $((want - have))
 }
 
 execute_layout;

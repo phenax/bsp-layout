@@ -14,6 +14,7 @@ Usage: bsp-layout command [args]
 Commands:
   set <layout> [desktop_selector]      - Will apply the layout to the selected desktop
   once <layout>                        - Will apply the layout on the current set of nodes
+  get <desktop_selector>               - Will print the layout assigned to a given desktop
   remove <desktop_selector>            - Will disable the layout
   layouts                              - Will list all available layouts
   version                              - Displays the version number of the tool
