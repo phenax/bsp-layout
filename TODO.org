@@ -3,16 +3,16 @@
    - [X] BUG: Tall/Wide layout constant root node issue
    - [X] BUG: Handle node_transfer
    - [X] Generalize bspwm default layouts into this
-   - [ ] Generalize bspwm's ratio config for tiled layout
    - [ ] Use desktop ids instead of names while saving state
    - [ ] Add disable all layouts command
 ** Optimizations & cleanup
-   - [ ] Just spawn one process that manages all desktops
+   - [ ] Just spawn one daemon that manages all desktops
    - [ ] Clean up code duplication with tall and wide layouts
    - [ ] Improve overall performance of each layout
 ** Config
    - [X] Runtime changes will be saved seperately and will not be persist
    - [X] Load layout specific config
+   - [ ] Generalize bspwm's ratio config for tiled layout
    - [ ] Allow configuring where new nodes that spawn will go (New master or not)
 ** Documentation
    - [ ] Add manpage entry
@@ -20,6 +20,6 @@
 ** Layouts
    - [X] Monocle
    - [X] Tiled (instead of default)
-   - [ ] Grid layout
    - [ ] Centered stack layout
+   - [ ] Grid layout
    - [ ] All floating
