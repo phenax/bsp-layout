@@ -57,12 +57,6 @@ start_listener() {
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
 
-  # Default layout removes any other listener
-  if [[ "$layout" == "default" ]]; then
-    remove_listener "$selected_desktop";
-    exit 0;
-  fi
-
   # If it is a bsp default layout, set that
   if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$layout$"); then
     remove_listener "$selected_desktop";
