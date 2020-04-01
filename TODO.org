@@ -3,6 +3,7 @@
    - [X] BUG: Tall/Wide layout constant root node issue
    - [X] BUG: Handle node_transfer
    - [X] Generalize bspwm default layouts into this
+   - [ ] Generalize bspwm's ratio config for tiled layout
    - [ ] Use desktop ids instead of names while saving state
    - [ ] Add disable all layouts command
 ** Optimizations & cleanup

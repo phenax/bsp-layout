@@ -11,6 +11,7 @@ curl https://github.com/phenax/bsp-layout/blob/master/install.sh | sudo sh -;
 
 
 ### Supported layouts
+
 * `tall` - Master-stack with a tall window.
 ```
 _______________
@@ -29,7 +30,7 @@ _______________
 |____|____|___|
 ```
 
-* `even` - Evenly balance all windows
+* `even` - Evenly balances all window areas
 ```
 _______________
 |___|____|____|
@@ -44,19 +45,43 @@ _______________
 |____|________|
 ```
 
+* `tiled` - Default bspwm's tiled layout
+```
+_______________
+|        |    |
+|        |____|
+|        |  | |
+|________|__|_|
+```
+
+* `monocle` - Default bspwm's monocle layout
+```
+_______________
+|             |
+|             |
+|             |
+|_____________|
+```
+
+
 
 ### Usage
 
-* Set a layout in desktop on index 6
-Not specifying the layout will apply the layout on the focused desktop
+* Help menu
 ```bash
-bsp-layout set tall ^6
+bsp-layout help
 ```
 
-* Remove layout applied to desktop on index 6
+* Set a layout in desktop named 6
+Not specifying the layout will apply the layout on the focused desktop
+```bash
+bsp-layout set tall 6
+```
+
+* Remove layout applied to desktop named 6
 This will remove any layout applied
 ```bash
-bsp-layout remove ^6
+bsp-layout remove 6
 ```
 
 * Apply a layout on your focused workspace once
