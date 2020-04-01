@@ -21,6 +21,9 @@ Commands:
   help                                 - See this help menu
 ";
 
+# Layouts provided by bsp out of the box
+BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
+
 # Kill old layout process
 kill_layout() {
   old_pid="$(get_desktop_options "$1" | valueof pid)";
@@ -51,22 +54,32 @@ start_listener() {
   layout=$1;
   selected_desktop=$2;
 
-  # GUARD: Default layout removes any other listener
-  [[ "$layout" == "default" ]] && remove_listener "$selected_desktop" && exit 0;
-
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
+
+  # Default layout removes any other listener
+  if [[ "$layout" == "default" ]]; then
+    remove_listener "$selected_desktop";
+    exit 0;
+  fi
+
+  # If it is a bsp default layout, set that
+  if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$layout$"); then
+    remove_listener "$selected_desktop";
+    bspc desktop "$selected_desktop" -l "$layout";
+    exit 0;
+  fi
 
   recalculate_layout() { run_layout $layout 2> /dev/null || true; }
 
   # Recalculate styles as soon as they are set if it is on the selected desktop
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;
 
-  # Then listen to node additions and recalculate as required
+  # Then listen to node changes and recalculate as required
   bspc subscribe node_{add,remove,transfer}  | while read line; do
     event=$(echo "$line" | awk '{print $1}');
-    col=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
-    desktop_id=$(echo "$line" | awk "{print \$$col}");
+    arg_index=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
+    desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
     desktop_name=$(get_desktop_name_from_id "$desktop_id");
 
     [[ "$desktop_name" = "$selected_desktop" ]] && recalculate_layout;
@@ -100,7 +113,7 @@ case "$action" in
   set)        start_listener "$@" ;;
   get)        layout=$(get_desktop_options "$1" | valueof layout); echo "${layout:-"default"}" ;;
   remove)     remove_listener "$1" ;;
-  layouts)    echo "default"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
+  layouts)    echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
   help)       echo -e "$HELP_TEXT" ;;
   version)    echo "$VERSION" ;;
   *)          echo -e "$HELP_TEXT" && exit 1 ;;
