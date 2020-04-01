@@ -1,7 +1,7 @@
 * Tasks
 ** General
    - [X] BUG: Tall/Wide layout constant root node issue
-   - [ ] BUG: Handle node_transfer
+   - [X] BUG: Handle node_transfer
    - [ ] Use desktop ids instead of names while saving state
    - [ ] Generalize bspwm default layouts into this
    - [ ] Add disable all layouts command

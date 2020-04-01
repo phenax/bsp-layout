@@ -63,8 +63,10 @@ start_listener() {
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;
 
   # Then listen to node additions and recalculate as required
-  bspc subscribe node_{add,remove} | while read line; do
-    desktop_id=$(echo "$line" | awk '{print $3}');
+  bspc subscribe node_{add,remove,transfer}  | while read line; do
+    event=$(echo "$line" | awk '{print $1}');
+    col=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
+    desktop_id=$(echo "$line" | awk "{print \$$col}");
     desktop_name=$(get_desktop_name_from_id "$desktop_id");
 
     [[ "$desktop_name" = "$selected_desktop" ]] && recalculate_layout;
