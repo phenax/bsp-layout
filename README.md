@@ -6,7 +6,7 @@ Manage layouts in bspwm (tall and wide)
 
 ### Installation
 ```bash
-curl https://github.com/phenax/bsp-layout/blob/master/install.sh | sudo sh -;
+curl https://raw.githubusercontent.com/phenax/bsp-layout/master/install.sh | sudo sh -;
 ```
 
 
