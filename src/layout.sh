@@ -2,7 +2,7 @@
 
 VERSION="0.0.1";
 
-ROOT="/usr/lib/bsp-layout";
+export ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/state.sh";
 

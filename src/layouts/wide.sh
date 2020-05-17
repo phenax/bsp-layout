@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/common.sh";
 source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/config.sh";
