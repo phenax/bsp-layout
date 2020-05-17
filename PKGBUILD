@@ -13,7 +13,7 @@ optdepends=()
 provides=("$pkgname")
 conflicts=("$pkgname")
 install=".install"
-source=("https://github.com/phenax/bsp-layout/archive/$pkgver.tar.gz")
+source=("$url/archive/$pkgver.tar.gz")
 md5sums=('SKIP')
 
 package() {
