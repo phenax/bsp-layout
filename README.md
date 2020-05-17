@@ -5,6 +5,16 @@ Manage layouts in bspwm (tall and wide)
 
 
 ### Installation
+
+Arch users can install it from AUR [bsp-layout](https://aur.archlinux.org/packages/bsp-layout/)
+```bash
+yay -S bsp-layout
+# OR
+yaourt bsp-layout
+```
+
+Others can install it directly using the install script
+
 ```bash
 curl https://raw.githubusercontent.com/phenax/bsp-layout/master/install.sh | sudo sh -;
 ```
