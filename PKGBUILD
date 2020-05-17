@@ -2,7 +2,7 @@
 pkgname=bsp-layout
 pkgver=0.0.1
 pkgrel=1
-pkgdesc="Dynamic layout management for bspwm with tall, wide, even, tiled"
+pkgdesc="Dynamic layout management for bspwm with tall, wide, even, tiled, monocle"
 arch=('any')
 url="https://github.com/phenax/bsp-layout"
 license=('MIT')
