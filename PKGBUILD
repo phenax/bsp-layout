@@ -13,10 +13,11 @@ optdepends=()
 provides=("$pkgname")
 conflicts=("$pkgname")
 install=".install"
-source=('git+https://github.com/phenax/bsp-layout.git')
+source=("https://github.com/phenax/bsp-layout/archive/$pkgver.tar.gz")
 md5sums=('SKIP')
 
 package() {
-	cd "$pkgname";
+  cd "$pkgname-$pkgver";
 	sudo ./install.sh local;
 }
+
