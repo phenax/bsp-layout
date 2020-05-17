@@ -14,10 +14,9 @@ provides=("$pkgname")
 conflicts=("$pkgname")
 install=".install"
 source=('git+https://github.com/phenax/bsp-layout.git')
-noextract=()
-md5sums=()
+md5sums=('SKIP')
 
 package() {
-	cd "$pkgname-$pkgver"
-	./install.sh local;
+	cd "$pkgname";
+	sudo ./install.sh local;
 }

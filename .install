@@ -31,5 +31,10 @@
 
 ## arg 1:  the old package version
 post_remove() {
-  ./install.sh uninstall;
+  local INSTALL_DIR=/usr/lib/bsp-layout;
+  local BINARY=/usr/local/bin/bsp-layout;
+
+  # Clean up
+  rm -rf $INSTALL_DIR;
+  rm -rf $BINARY;
 }
