@@ -100,3 +100,12 @@ This will apply the layout on the current set of nodes on that workspace but new
 bsp-layout once tall
 ```
 
+
+### Configuration
+
+You can configure the size of the master window in percentage in `$XDG_CONFIG_DIR/bsp-layout/layoutrc` file.
+An example of that file can be found in [`example.layoutrc`](https://github.com/phenax/bsp-layout/blob/master/example.layoutrc)
+
+```bash
+mkdir ~/.config/bsp-layout && curl https://raw.githubusercontent.com/phenax/bsp-layout/master/example.layoutrc > ~/.config/bsp-layout/layoutrc;
+```
