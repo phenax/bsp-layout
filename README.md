@@ -35,6 +35,15 @@ _______________
 |________|____|
 ```
 
+* `rtall` - Master-stack with a reversed tall window.
+```
+_______________
+|____|        |
+|____|        |
+|____|        |
+|____|________|
+```
+
 * `wide` - Master-stack with a wide window.
 ```
 _______________
@@ -42,6 +51,15 @@ _______________
 |             |
 |_____________|
 |____|____|___|
+```
+
+* `rwide` - Master-stack with a reversed wide window.
+```
+_______________
+|____|____|___|
+|             |
+|             |
+|_____________|
 ```
 
 * `even` - Evenly balances all window areas
