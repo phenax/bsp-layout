@@ -4,6 +4,7 @@ Manage layouts in bspwm (tall and wide)
 [BSPWM](https://github.com/baskerville/bspwm) does one thing and it does it well. It is a window manager. But some workflows require layout management to some extent. `bsp-layout` fills that gap.
 
 ### Dependencies
+* `bspc`
 * `bash`
 * `bc`
 
