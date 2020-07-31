@@ -50,7 +50,7 @@ execute_layout() {
   local want=$(echo "$master_size * $mon_height" | bc | sed 's/\..*//');
   local have=$(jget height "$(bspc query -T -n '@/1')");
 
-  bspc node "@/1.descendant_of.window.$node_filter" --resize bottom 0 $((want - have));
+  bspc node '@/1' --resize bottom 0 $((want - have));
 }
 
 execute_layout "$@";
