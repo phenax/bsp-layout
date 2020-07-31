@@ -21,9 +21,7 @@ Commands:
   help                                              - See this help menu
 
 Layout options:
-  Tall
-    --master-size 0.6         Set the master window size
-  Wide
+  tall,wide,rtall,rwide
     --master-size 0.6         Set the master window size
 ";
 
