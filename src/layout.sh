@@ -42,17 +42,20 @@ remove_listener() {
 }
 
 run_layout() {
-  local layout_file="$LAYOUTS/$1.sh";
+  local layout_file="$LAYOUTS/$1.sh"; shift;
 
   # GUARD: Check if layout exists
   [[ ! -f $layout_file ]] && echo "Layout does not exist" && exit 1;
 
-  bash -c "$layout_file";
+  bash "$layout_file" $*;
 }
 
 start_listener() {
-  layout=$1;
-  selected_desktop=$2;
+  layout=$1; shift;
+  selected_desktop=$1; shift;
+  [[ "$selected_desktop" == "--" ]] && selected_desktop="";
+
+  args=$@;
 
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
@@ -64,7 +67,7 @@ start_listener() {
     exit 0;
   fi
 
-  recalculate_layout() { run_layout $layout 2> /dev/null || true; }
+  recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Recalculate styles as soon as they are set if it is on the selected desktop
   [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;

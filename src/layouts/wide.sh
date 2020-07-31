@@ -9,17 +9,20 @@ master_size=$WIDE_RATIO;
 node_filter="!hidden";
 
 execute_layout() {
+  while [[ ! "$#" == 0 ]]; do
+    case "$1" in
+      --master-size) master_size="$2"; shift; ;;
+      *) echo "$x" ;;
+    esac;
+    shift;
+  done;
+
   # ensure the count of the master child is 1, or make it so
   local nodes=$(bspc query -N '@/1' -n .descendant_of.window.$node_filter);
   local win_count=$(echo "$nodes" | wc -l);
 
   if [ $win_count -ne 1 ]; then
-    local new_node="";
-    if [ -z "$*" ]; then
-      new_node=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1);
-    else
-      new_node=$*;
-    fi
+    local new_node=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1);
 
     if [ -z "$new_node" ]; then
       new_node=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1);
