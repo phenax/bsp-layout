@@ -92,6 +92,16 @@ Not specifying the layout will apply the layout on the focused desktop
 bsp-layout set tall 6
 ```
 
+* Remove layout applied to desktop named 6 with a 40% split
+Set the master size for layout
+```bash
+// Currently focused workspace
+bsp-layout set tall -- --master-size 0.4
+
+// Workspace 6
+bsp-layout set tall 6 -- --master-size 0.4
+```
+
 * Remove layout applied to desktop named 6
 This will remove any layout applied
 ```bash
