@@ -11,8 +11,10 @@ node_filter="!hidden";
 
 # :: NewNode -> CurrentMaster -> NextMaster
 get_next_node() {
-  local new_node=$1;
-  local current_master=$2;
+  [[ $# != 3 ]] && echo "Needs 3 arguments" && exit 1;
+  local spawn_behavior=$1;
+  local new_node=$2;
+  local current_master=$3;
 
   case "$spawn_behavior" in
     spawn_after) echo "$current_master" ;;
@@ -24,9 +26,12 @@ execute_layout() {
   while [[ ! "$#" == 0 ]]; do
     case "$1" in
       --master-size) master_size="$2"; shift; ;;
+      --spawn-behavior) spawn_behavior="$2"; shift; ;;
     esac;
     shift;
   done;
+
+  echo "$spawn_behavior";
 
   # ensure the count of the master child is 1, or make it so
   local nodes=$(bspc query -N '@/1' -n .descendant_of.window.$node_filter);
@@ -40,7 +45,7 @@ execute_layout() {
     fi
 
     local current_master=$(echo "$nodes" | head -n 1);
-    local root=$(get_next_node "$new_node" "$current_master");
+    local root=$(get_next_node "$spawn_behavior" "$new_node" "$current_master");
 
     # move everything into 2 that is not our new_node
     for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $root); do
