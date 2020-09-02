@@ -5,14 +5,25 @@ source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/config.sh";
 
 master_size=$TALL_RATIO;
+spawn_behavior=replace_master;
 
 node_filter="!hidden";
+
+# :: NewNode -> CurrentMaster -> NextMaster
+get_next_node() {
+  local new_node=$1;
+  local current_master=$2;
+
+  case "$spawn_behavior" in
+    spawn_after) echo "$current_master" ;;
+    replace_master) echo "$new_node" ;;
+  esac;
+}
 
 execute_layout() {
   while [[ ! "$#" == 0 ]]; do
     case "$1" in
       --master-size) master_size="$2"; shift; ;;
-      *) echo "$x" ;;
     esac;
     shift;
   done;
@@ -28,7 +39,8 @@ execute_layout() {
       new_node=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1);
     fi
 
-    local root=$(echo "$nodes" | head -n 1);
+    local current_master=$(echo "$nodes" | head -n 1);
+    local root=$(get_next_node "$new_node" "$current_master");
 
     # move everything into 2 that is not our new_node
     for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $root); do
