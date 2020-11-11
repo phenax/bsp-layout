@@ -75,7 +75,9 @@ cycle_layouts() {
   while [[ $# != 0 ]]; do
     case $1 in
       --layouts)
-          [[ -z "$2" ]] && (layouts=$(echo "$2" | tr ',' '\n'));
+          if [[ ! -z "$2" ]]; then
+            layouts=$(echo "$2" | tr ',' '\n');
+          fi;
           shift;
       ;;
       --desktop)
