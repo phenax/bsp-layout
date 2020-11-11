@@ -95,9 +95,6 @@ cycle_layouts() {
     next_layout=$(echo -e "$layouts" | head -n 1);
   fi;
 
-  echo -e "$layouts";
-  echo "";
-  echo "";
   echo "$current_layout:$next_layout";
   start_listener "$next_layout" "$desktop_selector";
 }
