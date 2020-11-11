@@ -15,6 +15,7 @@ Commands:
   set <layout> [desktop_selector] -- [options]      - Will apply the layout to the selected desktop
   once <layout> [desktop_selector] -- [options]     - Will apply the layout on the current set of nodes
   get <desktop_selector>                            - Will print the layout assigned to a given desktop
+  cycle [options]                                   - Will apply the layout on the current set of nodes
   remove <desktop_selector>                         - Will disable the layout
   layouts                                           - Will list all available layouts
   version                                           - Displays the version number of the tool
@@ -23,6 +24,11 @@ Commands:
 Layout options:
   tall,wide,rtall,rwide
     --master-size 0.6         Set the master window size
+
+Cycle options:
+  cycle
+    --layouts wide,tall,tiled
+    --desktop 1
 ";
 
 # Layouts provided by bsp out of the box
@@ -54,6 +60,46 @@ run_layout() {
   bash "$layout_file" $*;
 }
 
+get_layout() {
+  local layout=$(get_desktop_options "$1" | valueof layout);
+  echo "${layout:-"-"}";
+}
+
+list_layouts() {
+  echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//';
+}
+
+cycle_layouts() {
+  local layouts=$(list_layouts);
+  local desktop_selector=$(get_focused_desktop);
+  while [[ $# != 0 ]]; do
+    case $1 in
+      --layouts)
+          [[ -z "$2" ]] && (layouts=$(echo "$2" | tr ',' '\n'));
+          shift;
+      ;;
+      --desktop)
+        desktop_selector="$2";
+        shift;
+      ;;
+      *) ;;
+    esac;
+    shift;
+  done;
+
+  local current_layout=$(get_layout "$desktop_selector");
+  local next_layout=$(echo -e "$layouts" | grep "$current_layout" -A 1 | tail -n 1);
+  if [[ "$next_layout" == "$current_layout" ]] || [[ -z "$next_layout" ]]; then
+    next_layout=$(echo -e "$layouts" | head -n 1);
+  fi;
+
+  echo -e "$layouts";
+  echo "";
+  echo "";
+  echo "$current_layout:$next_layout";
+  start_listener "$next_layout" "$desktop_selector";
+}
+
 start_listener() {
   layout=$1; shift;
   selected_desktop=$1; shift;
@@ -64,9 +110,12 @@ start_listener() {
   # Set selected desktop to currently focused desktop if option is not specified
   [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop);
 
+  bspc desktop "$selected_desktop" -l tiled;
+
   # If it is a bsp default layout, set that
   if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$layout$"); then
     remove_listener "$selected_desktop";
+    set_desktop_option $selected_desktop 'layout' "$layout";
     bspc desktop "$selected_desktop" -l "$layout";
     exit 0;
   fi
@@ -112,9 +161,10 @@ case "$action" in
   reload)     reload_layouts ;;
   once)       run_layout "$1" ;;
   set)        start_listener "$@" ;;
-  get)        layout=$(get_desktop_options "$1" | valueof layout); echo "${layout:-"default"}" ;;
+  cycle)      cycle_layouts "$@" ;;
+  get)        get_layout "$@" ;;
   remove)     remove_listener "$1" ;;
-  layouts)    echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//'; ;;
+  layouts)    list_layouts ;;
   help)       echo -e "$HELP_TEXT" ;;
   version)    echo "$VERSION" ;;
   *)          echo -e "$HELP_TEXT" && exit 1 ;;
