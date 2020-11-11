@@ -5,10 +5,12 @@ Manage layouts in bspwm (tall and wide)
 
 <a href="https://www.buymeacoffee.com/phenax"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg?style=flat-square" alt="Buy Me A Coffee donate button" /></a>
 
+
 ### Dependencies
 * `bspc`
 * `bash`
 * `bc`
+
 
 ### Installation
 
@@ -19,11 +21,14 @@ yay -S bsp-layout
 yaourt bsp-layout
 ```
 
-Others can install it directly using the install script
+Others can install it directly using the install script.
+
+**Note: Please read scripts like these before executing it on your machine**
 
 ```bash
 curl https://raw.githubusercontent.com/phenax/bsp-layout/master/install.sh | sudo sh -;
 ```
+
 
 
 ### Supported layouts
@@ -133,6 +138,26 @@ This will apply the layout on the current set of nodes on that workspace but new
 ```bash
 bsp-layout once tall
 ```
+
+* Cycle through layouts
+Cycle through all (or a custom list of) layouts.
+```bash
+# Cycle through all layouts
+bsp-layout cycle
+
+# Or to cycle through a custom list of layouts
+bsp-layout cycle --layouts tall,monocle,wide
+
+# For a specific desktop
+bsp-layout cycle --layouts tall,monocle,wide --desktop 4
+```
+
+* Toggle layout
+```bash
+# Toggle between monocle and tall layouts
+bsp-layout cycle tall,monocle
+```
+
 
 
 ### Configuration
