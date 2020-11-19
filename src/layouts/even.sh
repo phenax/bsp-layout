@@ -6,4 +6,8 @@ execute_layout() {
   auto_balance '@/';
 }
 
-execute_layout;
+cmd=$1; shift;
+case "$cmd" in
+  run) execute_layout "$@" ;;
+  *) ;;
+esac;

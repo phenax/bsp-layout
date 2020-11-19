@@ -1,3 +1,5 @@
+source "$ROOT/utils/common.sh";
+
 # amend the split type so we are arranged correctly
 rotate() {
   node=$1;
@@ -6,8 +8,8 @@ rotate() {
   have=${have:1:${#have}-2};
   angle=$3;
 
-  if [[ ! "$have" = "$want" ]]; then
-    bspc node "$node" -R "$3";
+  if [[ "$have" != "$want" ]]; then
+    bspc node "$node" -R "$angle";
   fi
 }
 
