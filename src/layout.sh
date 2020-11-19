@@ -24,7 +24,9 @@ Commands:
 
 Layout options:
   tall,wide,rtall,rwide
-    --master-size 0.6         Set the master window size
+    --master-size 0.6                   Set the master window size
+  grid
+    --direction vertical,horizontal     Set the orientation for grid
 
 Cycle options:
   cycle
