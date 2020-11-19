@@ -36,3 +36,8 @@ ln -s $INSTALL_DIR/layout.sh $BINARY &&
 rm -rf $TMP_DIR &&
 
 echo "Installed bsp-layout";
+
+# Check for dependencies
+for dep in bc bspc; do
+  !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed";
+done;
