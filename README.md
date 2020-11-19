@@ -7,9 +7,10 @@ Manage layouts in bspwm (tall and wide)
 
 
 ### Dependencies
-* `bspc`
 * `bash`
+* `bspc`
 * `bc`
+* `man`
 
 
 ### Installation

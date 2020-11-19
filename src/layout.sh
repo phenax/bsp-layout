@@ -8,30 +8,6 @@ source "$ROOT/utils/state.sh";
 
 LAYOUTS="$ROOT/layouts";
 
-HELP_TEXT="
-Usage: bsp-layout command [args]
-
-Commands:
-  set <layout> [desktop_selector] -- [options]      - Apply the layout to the selected desktop
-  once <layout> [desktop_selector] -- [options]     - Apply the layout on the current set of nodes
-  get <desktop_selector>                            - Print the layout assigned to a given desktop
-  cycle [options]                                   - Apply the layout on the current set of nodes
-  remove <desktop_selector>                         - Disable the layout
-  layouts                                           - List all available layouts
-  reload                                            - Reload all layouts
-  version                                           - Displays the version number of the tool
-  help                                              - See this help menu
-
-Layout options:
-  tall,wide,rtall,rwide
-    --master-size 0.6         Set the master window size
-
-Cycle options:
-  cycle
-    --layouts wide,tall,tiled
-    --desktop 1
-";
-
 # Layouts provided by bsp out of the box
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
@@ -165,7 +141,7 @@ reload_layouts() {
 }
 
 # Check for dependencies
-for dep in bc bspc; do
+for dep in bc bspc man; do
   !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed" && exit 1;
 done;
 
@@ -179,7 +155,8 @@ case "$action" in
   get)        get_layout "$@" ;;
   remove)     remove_listener "$1" ;;
   layouts)    list_layouts ;;
-  help)       echo -e "$HELP_TEXT" ;;
+  help)       man bsp-layout ;;
   version)    echo "$VERSION" ;;
-  *)          echo -e "$HELP_TEXT" && exit 1 ;;
+  *)          echo -e "Unknown subcommand. Run bsp-layout help" && exit 1 ;;
 esac
+
