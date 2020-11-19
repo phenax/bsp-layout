@@ -33,8 +33,10 @@
 post_remove() {
   local INSTALL_DIR=/usr/lib/bsp-layout;
   local BINARY=/usr/local/bin/bsp-layout;
+  local MAN_PAGE=/usr/local/man/man1/bsp-layout.1;
 
   # Clean up
   rm -rf $INSTALL_DIR;
   rm -rf $BINARY;
+  rm -rf $MAN_PAGE;
 }
