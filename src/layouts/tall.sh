@@ -28,7 +28,7 @@ execute_layout() {
       new_node=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1);
     fi
 
-    local root=$(echo "$nodes" | head -n 1);
+    local root=$(echo -e "$nodes" | head -n 1);
 
     # move everything into 2 that is not our new_node
     for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $root); do

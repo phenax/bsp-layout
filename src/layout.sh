@@ -121,9 +121,6 @@ start_listener() {
 
   recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
-  # Recalculate styles as soon as they are set if it is on the selected desktop
-  [[ "$(get_focused_desktop)" = "$selected_desktop" ]] && recalculate_layout;
-
   # Then listen to node changes and recalculate as required
   bspc subscribe node_{add,remove,transfer}  | while read line; do
     event=$(echo "$line" | awk '{print $1}');
@@ -143,6 +140,13 @@ start_listener() {
   # Set current layout
   set_desktop_option $selected_desktop 'layout' "$layout";
   set_desktop_option $selected_desktop 'pid'    "$LAYOUT_PID";
+
+  # Recalculate styles as soon as they are set if it is on the selected desktop
+  if [[ "$(get_focused_desktop)" = "$selected_desktop" ]]; then
+    recalculate_layout;
+    recalculate_layout;
+  fi;
+
 
   echo "[$LAYOUT_PID]";
 }
