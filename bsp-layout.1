@@ -11,8 +11,8 @@ bsp-layout \- A dynamic layout manager for bspwm
 
 
 .SH DESCRIPTION
-bsp-layout is a dynamic layout manager for bspwm written in bash. It has tall,
-wide, rtall, rwide, etc layout options to fit most workflows.
+bsp-layout is a dynamic layout manager for bspwm, written in bash. It provides
+layout options to fit most workflows.
 
 
 
@@ -20,20 +20,22 @@ wide, rtall, rwide, etc layout options to fit most workflows.
 .SH OPTIONS
 
 .TP
-.B set <layout> [desktop_name] -- [options]
+.B set <layout> [desktop_name] -- [layout options]
 Apply the layout to the selected desktop. This will re-calculate layout when a
-node is added or removed.
+node is added or removed. If desktop_name is not passed, it will apply layout
+to the currently focused desktop
 
 .TP
-.B once <layout> [desktop_name] -- [options]
-Apply the layout to the selected
-desktop only once. This re-arranges the nodes in the desktop once and changes
-will not re-calculate layout.
+.B once <layout> [desktop_name] -- [layout options]
+Apply the layout to the selected desktop only once. This re-arranges the nodes
+in the desktop once and changes will not re-calculate layout. If desktop_name
+is not passed, it will apply layout to the currently focused desktop
 
 .TP
 .B cycle <layout> [--layouts tall,wide] [--desktop <desktop_name>]
-Cycle through a list of layouts. If `layouts` option is not passed, the program
-will cycle through all available layouts.
+Cycle through a list of layouts. If layouts is not passed, the program will
+cycle through all available layouts. If desktop is not passed, it will apply
+layout to the currently focused desktop
 
 .TP
 .B get <desktop_name>
@@ -45,11 +47,24 @@ Disable the layout on a given desktop.
 
 .TP
 .B layouts
-Disable the layout on a given desktop.
+List all available layout options
+
+.TP
+.B reload
+Reload layouts for all desktops
+
+.TP
+.B version
+Find what version of bsp-layout you have installed
+
+.TP
+.B help
+Opens this manpage
 
 
 
-.SH Layouts
+
+.SH LAYOUTS
 
 .SS tall
 A master-stack layout with nodes stacked vertically to the right of master
