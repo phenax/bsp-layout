@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="0.0.3";
+VERSION="0.0.4";
 
 INSTALL_DIR=/usr/lib/bsp-layout;
 BINARY=/usr/local/bin/bsp-layout;
