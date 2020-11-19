@@ -151,6 +151,11 @@ start_listener() {
   echo "[$LAYOUT_PID]";
 }
 
+once_layout() {
+  run_layout "$@";
+  run_layout "$@";
+}
+
 reload_layouts() {
   list_desktops | while read desktop; do
     layout=$(get_desktop_options "$desktop" | valueof layout);
@@ -167,7 +172,7 @@ action=$1; shift;
 
 case "$action" in
   reload)     reload_layouts ;;
-  once)       run_layout $* ;;
+  once)       once_layout "$@" ;;
   set)        start_listener "$@" ;;
   cycle)      cycle_layouts "$@" ;;
   get)        get_layout "$@" ;;
