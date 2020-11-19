@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
+VERSION="0.0.3";
+
 INSTALL_DIR=/usr/lib/bsp-layout;
 BINARY=/usr/local/bin/bsp-layout;
+MAN_PAGE=/usr/local/man/man1/bsp-layout.1;
 
 # Clean up
 rm -rf $INSTALL_DIR;
 rm -rf $BINARY;
+rm -rf $MAN_PAGE;
 
 # Un install is just re-install minus the install
 if [[ "$1" == "uninstall" ]]; then
@@ -27,6 +31,9 @@ mkdir -p $INSTALL_DIR &&
 cp -r src/* $INSTALL_DIR/ &&
 chmod +x $INSTALL_DIR/layouts/*.sh &&
 chmod +x $INSTALL_DIR/layout.sh &&
+
+# Install manpage
+sed "s/VERSION/$VERSION/g" < bsp-layout.1 > $MAN_PAGE &&
 
 # Create binary executable
 echo "Creating binary..." &&
