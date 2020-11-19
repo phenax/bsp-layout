@@ -163,7 +163,7 @@ action=$1; shift;
 
 case "$action" in
   reload)     reload_layouts ;;
-  once)       run_layout "$1" ;;
+  once)       run_layout $* ;;
   set)        start_listener "$@" ;;
   cycle)      cycle_layouts "$@" ;;
   get)        get_layout "$@" ;;
