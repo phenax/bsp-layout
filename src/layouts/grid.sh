@@ -2,15 +2,25 @@
 
 source "$ROOT/utils/layout.sh";
 
+setup_layout() {
+  rotate '@/' horizontal 90;
+  rotate '@/2' vertical 90;
+}
+
 execute_layout() {
-  target=first;
+  local target='first';
 
   for node in $(bspc query -N -n .local.window | sort); do
-    bspc node $node -n "$(bspc query -N -n @$(bspc query -D -d):/${target})";
-    [[ "$target" = "first" ]] && target="second" || target="first";
+    bspc node $node -n "$(bspc query -N -n @/${target})";
+    [[ "$target" == 'first' ]] && target='second' || target='first';
   done;
 
   auto_balance '@/';
 }
 
-execute_layout "$@";
+cmd=$1; shift;
+case "$cmd" in
+  run) execute_layout "$@" ;;
+  setup) setup_layout "$@" ;;
+  *) ;;
+esac;

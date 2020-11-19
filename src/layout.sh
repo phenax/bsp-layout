@@ -131,14 +131,16 @@ start_listener() {
     desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
     desktop_name=$(get_desktop_name_from_id "$desktop_id");
 
-    [[ "$desktop_name" = "$selected_desktop" ]] && if [[ "$event" == "node_transfer" ]]; then
-      local source=$(echo "$line" | awk '{print $3}');
-      local dest=$(echo "$line" | awk '{print $3}');
+    initialize_layout;
+    [[ "$desktop_name" = "$selected_desktop" ]] && \
+      if [[ "$event" == "node_transfer" ]]; then
+        local source=$(echo "$line" | awk '{print $3}');
+        local dest=$(echo "$line" | awk '{print $3}');
 
-      [[ "$source" != "$dest" ]] && recalculate_layout;
-    else
-      recalculate_layout;
-    fi;
+        [[ "$source" != "$dest" ]] && recalculate_layout;
+      else
+        recalculate_layout;
+      fi;
   done &
 
   LAYOUT_PID=$!; # PID of the listener in the background
