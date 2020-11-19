@@ -25,15 +25,20 @@ if [[ ! "$1" == "local" ]]; then
   cd $TMP_DIR/clone;
 fi
 
+inject_version() {
+  sed "s/{{VERSION}}/$VERSION/g" < $1 > $2;
+}
+
 # Copy contents files to install directory
 echo "Copying files..." &&
 mkdir -p $INSTALL_DIR &&
 cp -r src/* $INSTALL_DIR/ &&
+inject_version "src/layout.sh" "$INSTALL_DIR/layout.sh" && # Replace version number
 chmod +x $INSTALL_DIR/layouts/*.sh &&
 chmod +x $INSTALL_DIR/layout.sh &&
 
 # Install manpage
-sed "s/VERSION/$VERSION/g" < bsp-layout.1 > $MAN_PAGE &&
+inject_version "bsp-layout.1" "$MAN_PAGE" &&
 
 # Create binary executable
 echo "Creating binary..." &&

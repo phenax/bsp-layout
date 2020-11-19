@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="0.0.3";
+VERSION="{{VERSION}}";
 
 export ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/desktop.sh";
