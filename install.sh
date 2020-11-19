@@ -39,6 +39,7 @@ chmod +x $INSTALL_DIR/layout.sh &&
 
 # Install manpage
 inject_version "bsp-layout.1" "$MAN_PAGE" &&
+chmod 644 "$MAN_PAGE" &&
 
 # Create binary executable
 echo "Creating binary..." &&
