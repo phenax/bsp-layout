@@ -154,6 +154,11 @@ reload_layouts() {
   done;
 }
 
+# Check for dependencies
+for dep in bc bspc; do
+  !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed" && exit 1;
+done;
+
 action=$1; shift;
 
 case "$action" in
