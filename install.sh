@@ -41,3 +41,5 @@ echo "Installed bsp-layout";
 for dep in bc bspc; do
   !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed";
 done;
+
+exit 0;
