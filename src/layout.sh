@@ -74,7 +74,7 @@ cycle_layouts() {
   done;
 
   local current_layout=$(get_layout "$desktop_selector");
-  local next_layout=$(echo -e "$layouts" | grep "$current_layout" -A 1 | tail -n 1);
+  local next_layout=$(echo -e "$layouts" | grep -x "$current_layout" -A 1 | tail -n 1);
   if [[ "$next_layout" == "$current_layout" ]] || [[ -z "$next_layout" ]]; then
     next_layout=$(echo -e "$layouts" | head -n 1);
   fi;
