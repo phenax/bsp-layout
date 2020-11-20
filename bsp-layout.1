@@ -1,0 +1,176 @@
+.TH BSP-LAYOUT 1 bsp-layout\-{{VERSION}}
+.SH NAME
+bsp-layout \- A dynamic layout manager for bspwm
+
+
+
+.SH SYNOPSIS
+.B bsp-layout
+.RB [set|once|get|cycle|remove|layouts|reload|version|help]
+
+
+
+.SH DESCRIPTION
+bsp-layout is a dynamic layout manager for bspwm, written in bash. It provides
+layout options to fit most workflows.
+
+
+
+
+.SH OPTIONS
+
+.TP
+.B set <layout> [desktop_name] -- [layout options]
+Apply the layout to the selected desktop. This will re-calculate layout when a
+node is added or removed. If desktop_name is not passed, it will apply layout
+to the currently focused desktop
+
+.TP
+.B once <layout> [desktop_name] -- [layout options]
+Apply the layout to the selected desktop only once. This re-arranges the nodes
+in the desktop once and changes will not re-calculate layout. If desktop_name
+is not passed, it will apply layout to the currently focused desktop
+
+.TP
+.B cycle <layout> [--layouts tall,wide] [--desktop <desktop_name>]
+Cycle through a list of layouts. If layouts is not passed, the program will
+cycle through all available layouts. If desktop is not passed, it will apply
+layout to the currently focused desktop
+
+.TP
+.B get <desktop_name>
+Get the name of the layout running on a given desktop.
+
+.TP
+.B remove <desktop_selector>
+Disable the layout on a given desktop.
+
+.TP
+.B layouts
+List all available layout options
+
+.TP
+.B reload
+Reload layouts for all desktops
+
+.TP
+.B version
+Find what version of bsp-layout you have installed
+
+.TP
+.B help
+Opens this manpage
+
+
+
+
+.SH LAYOUTS
+
+.SS tall
+A master-stack layout with nodes stacked vertically to the right of master
+.nf
+_______________
+|        |____|
+|        |____|
+|        |____|
+|________|____|
+.fi
+.TP
+.B --master-size <percentage>
+The percentage width taken up by the master window in the layout
+
+
+.SS wide
+A master-stack layout with nodes stacked horizontally below master
+.nf
+_______________
+|             |
+|             |
+|_____________|
+|____|____|___|
+.fi
+.TP
+.B --master-size <percentage>
+The percentage height taken up by the master window in the layout
+
+
+.SS rtall
+(Reverse tall) A master-stack layout with nodes stacked vertically to the left
+of master
+.nf
+_______________
+|____|        |
+|____|        |
+|____|        |
+|____|________|
+.fi
+.TP
+.B --master-size <percentage>
+The percentage width taken up by the master window in the layout
+
+
+.SS rwide
+(Reverse wide) A master-stack layout with nodes stacked horizontally above
+master
+.nf
+_______________
+|____|____|___|
+|             |
+|             |
+|_____________|
+.fi
+.TP
+.B --master-size <percentage>
+The percentage height taken up by the master window in the layout
+
+
+.SS even
+Distributes all window areas in a desktop evenly
+.nf
+_______________
+|___|____|____|
+|___|____|____|
+|___|____|____|
+
+OR
+_______________
+|    |        |
+|    |________|
+|    |        |
+|____|________|
+.fi
+
+
+.SS tiled
+The default tiled layout provided by bspwm
+.nf
+_______________
+|        |    |
+|        |____|
+|        |  | |
+|________|__|_|
+.fi
+
+
+.SS monocle
+The default monocle layout provided by bspwm
+.nf
+_______________
+|             |
+|             |
+|             |
+|_____________|
+.fi
+
+
+
+
+.SH BUGS
+Report issues to https://github.com/phenax/bsp-layout/issues
+
+.SH AUTHOR
+Akshay Nair <phenax5@gmail.com>
+
+.SH LINKS
+Homepage <https://github.com/phenax/bsp-layout>
+
