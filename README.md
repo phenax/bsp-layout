@@ -79,7 +79,7 @@ _____________
 |___|___|___|
 ```
 
-* `vgrid` - Vertical grid layout
+* `rgrid` - Vertical grid layout
 ```
 _____________
 |_____|_____|
