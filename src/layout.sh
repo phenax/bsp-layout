@@ -7,7 +7,7 @@ source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/state.sh";
 
-LAYOUTS="$ROOT/layouts";
+export LAYOUTS="$ROOT/layouts";
 
 # Layouts provided by bsp out of the box
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
@@ -39,7 +39,7 @@ get_layout_file() {
 setup_layout() { bash "$(get_layout_file $1)" setup $*; }
 run_layout() {
   local old_scheme=$(bspc config automatic_scheme);
-  bspc config automatic_scheme longest_side;
+  bspc config automatic_scheme alternate;
   bash "$(get_layout_file $1)" run $*;
   bspc config automatic_scheme $old_scheme;
 }
