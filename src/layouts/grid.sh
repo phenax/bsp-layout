@@ -3,26 +3,8 @@
 source "$ROOT/utils/layout.sh";
 
 setup_layout() {
-  local direction="horizontal";
-
-  while [[ ! "$#" == 0 ]]; do
-    case "$1" in
-      --direction) direction="$2"; shift; ;;
-      *) ;;
-    esac;
-    shift;
-  done;
-
-  case $direction in
-    vertical)
-      rotate '@/' vertical 90;
-      rotate '@/2' horizontal 90;
-    ;;
-    *)
-      rotate '@/' horizontal 90;
-      rotate '@/2' vertical 90;
-    ;;
-  esac;
+  rotate '@/' horizontal 90;
+  rotate '@/2' vertical 90;
 }
 
 execute_layout() {
