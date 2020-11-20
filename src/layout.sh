@@ -37,7 +37,12 @@ get_layout_file() {
 }
 
 setup_layout() { bash "$(get_layout_file $1)" setup $*; }
-run_layout() { bash "$(get_layout_file $1)" run $*; }
+run_layout() {
+  local old_scheme=$(bspc config automatic_scheme);
+  bspc config automatic_scheme longest_side;
+  bash "$(get_layout_file $1)" run $*;
+  bspc config automatic_scheme $old_scheme;
+}
 
 get_layout() {
   local layout=$(get_desktop_options "$1" | valueof layout);
@@ -113,7 +118,7 @@ start_listener() {
 
       if [[ "$event" == "node_transfer" ]]; then
         local source=$(echo "$line" | awk '{print $3}');
-        local dest=$(echo "$line" | awk '{print $3}');
+        local dest=$(echo "$line" | awk '{print $6}');
 
         [[ "$source" != "$dest" ]] && recalculate_layout;
       else
