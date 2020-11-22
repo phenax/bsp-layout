@@ -29,24 +29,26 @@ inject_version() {
   sed "s/{{VERSION}}/$VERSION/g" < $1 > $2;
 }
 
+_() { $* || (echo "Install failed at: $@" && exit 1); }
+
 # Copy contents files to install directory
-echo "Copying files..." &&
-mkdir -p $INSTALL_DIR &&
-cp -r src/* $INSTALL_DIR/ &&
-inject_version "src/layout.sh" "$INSTALL_DIR/layout.sh" && # Replace version number
-chmod +x $INSTALL_DIR/layouts/*.sh &&
-chmod +x $INSTALL_DIR/layout.sh &&
+echo "Copying files...";
+_ mkdir -p $INSTALL_DIR;
+_ cp -r src/* $INSTALL_DIR/;
+_ inject_version "src/layout.sh" "$INSTALL_DIR/layout.sh"; # Replace version number
+_ chmod +x $INSTALL_DIR/layouts/*.sh;
+_ chmod +x $INSTALL_DIR/layout.sh;
 
 # Install manpage
-inject_version "bsp-layout.1" "$MAN_PAGE" &&
-chmod 644 "$MAN_PAGE" &&
+_ inject_version "bsp-layout.1" "$MAN_PAGE";
+_ chmod 644 "$MAN_PAGE";
 
 # Create binary executable
-echo "Creating binary..." &&
-ln -s $INSTALL_DIR/layout.sh $BINARY &&
+echo "Creating binary...";
+_ ln -s $INSTALL_DIR/layout.sh $BINARY;
 
 # Remove clone directory
-rm -rf $TMP_DIR &&
+_ rm -rf $TMP_DIR;
 
 echo "Installed bsp-layout";
 
