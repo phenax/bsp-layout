@@ -56,4 +56,8 @@ execute_layout() {
   bspc node '@/1' --resize bottom 0 $((want - have));
 }
 
-execute_layout "$@";
+cmd=$1; shift;
+case "$cmd" in
+  run) execute_layout "$@" ;;
+  *) ;;
+esac;
