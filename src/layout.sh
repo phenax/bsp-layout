@@ -4,9 +4,10 @@ VERSION="{{VERSION}}";
 
 export ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/desktop.sh";
+source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/state.sh";
 
-LAYOUTS="$ROOT/layouts";
+export LAYOUTS="$ROOT/layouts";
 
 # Layouts provided by bsp out of the box
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
@@ -28,13 +29,19 @@ remove_listener() {
   set_desktop_option $desktop 'pid'    "";
 }
 
-run_layout() {
+get_layout_file() {
   local layout_file="$LAYOUTS/$1.sh"; shift;
-
   # GUARD: Check if layout exists
   [[ ! -f $layout_file ]] && echo "Layout does not exist" && exit 1;
+  echo "$layout_file";
+}
 
-  bash "$layout_file" $*;
+setup_layout() { bash "$(get_layout_file $1)" setup $*; }
+run_layout() {
+  local old_scheme=$(bspc config automatic_scheme);
+  bspc config automatic_scheme alternate;
+  bash "$(get_layout_file $1)" run $*;
+  bspc config automatic_scheme $old_scheme;
 }
 
 get_layout() {
@@ -67,7 +74,7 @@ cycle_layouts() {
   done;
 
   local current_layout=$(get_layout "$desktop_selector");
-  local next_layout=$(echo -e "$layouts" | grep "$current_layout" -A 1 | tail -n 1);
+  local next_layout=$(echo -e "$layouts" | grep -x "$current_layout" -A 1 | tail -n 1);
   if [[ "$next_layout" == "$current_layout" ]] || [[ -z "$next_layout" ]]; then
     next_layout=$(echo -e "$layouts" | head -n 1);
   fi;
@@ -96,6 +103,7 @@ start_listener() {
     exit 0;
   fi
 
+  initialize_layout() { setup_layout $layout $args 2> /dev/null || true; }
   recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
@@ -105,7 +113,18 @@ start_listener() {
     desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
     desktop_name=$(get_desktop_name_from_id "$desktop_id");
 
-    [[ "$desktop_name" = "$selected_desktop" ]] && recalculate_layout;
+    if [[ "$desktop_name" = "$selected_desktop" ]]; then
+      initialize_layout;
+
+      if [[ "$event" == "node_transfer" ]]; then
+        local source=$(echo "$line" | awk '{print $3}');
+        local dest=$(echo "$line" | awk '{print $6}');
+
+        [[ "$source" != "$dest" ]] && recalculate_layout;
+      else
+        recalculate_layout;
+      fi;
+    fi;
   done &
 
   LAYOUT_PID=$!; # PID of the listener in the background
@@ -118,12 +137,15 @@ start_listener() {
   set_desktop_option $selected_desktop 'layout' "$layout";
   set_desktop_option $selected_desktop 'pid'    "$LAYOUT_PID";
 
+  # Setup
+  initialize_layout;
+
   # Recalculate styles as soon as they are set if it is on the selected desktop
-  if [[ "$(get_focused_desktop)" = "$selected_desktop" ]]; then
+  if [[ "$(get_focused_desktop)" == "$selected_desktop" ]]; then
+    # Calculate layout twice to ensure rotations are corrected from previous layout
     recalculate_layout;
     recalculate_layout;
   fi;
-
 
   echo "[$LAYOUT_PID]";
 }
