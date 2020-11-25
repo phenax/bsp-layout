@@ -1,6 +1,6 @@
 # Maintainer: Akshay Nair <phenax5@gmail.com>
 pkgname=bsp-layout
-pkgver=0.0.4
+pkgver=0.0.5
 pkgrel=1
 pkgdesc="Dynamic layout management for bspwm with tall, wide, even, tiled, monocle"
 arch=('any')
@@ -18,6 +18,6 @@ md5sums=('SKIP')
 
 package() {
   cd "$pkgname-$pkgver";
-	sudo ./install.sh local;
+  sudo ./install.sh local;
 }
 
