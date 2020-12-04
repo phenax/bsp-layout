@@ -4,11 +4,15 @@ TMP_DIR=$(mktemp -d /tmp/bsp-layout-install.XXXXX);
 
 ## Clone to local directory
 if [[ ! "$1" == "local" ]]; then
-  git clone https://github.com/phenax/bsp-layout.git $TMP_DIR/clone;
-  cd $TMP_DIR/clone;
+  git clone https://github.com/phenax/bsp-layout.git $TMP_DIR;
+  cd $TMP_DIR;
 fi
 
-make install;
+sudo make install || exit 1;
 
-rm -rf $TMP_DIR;
+# Check for dependencies
+for dep in bc bspc; do
+  !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed";
+done;
 
+exit 0;
