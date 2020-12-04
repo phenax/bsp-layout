@@ -15,4 +15,6 @@ for dep in bc bspc; do
   !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed";
 done;
 
+rm -rf "$TMP_DIR";
+
 exit 0;
