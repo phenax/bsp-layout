@@ -4,7 +4,7 @@ VERSION = 0.0.5
 
 PREFIX = ${DESTDIR}/usr/local
 MANPREFIX = ${PREFIX}/share/man
-SRCPREFIX = ${DESTDIR}/usr/lib
+SRCPREFIX = ${PREFIX}/lib
 
 BINARY_PATH = ${PREFIX}/bin
 MAN_PATH = ${MANPREFIX}/man1
