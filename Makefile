@@ -2,7 +2,7 @@
 
 VERSION = 0.0.5
 
-PREFIX = /usr/local
+PREFIX = /usr
 MANPREFIX = ${PREFIX}/share/man
 SRCPREFIX = ${PREFIX}/lib
 
