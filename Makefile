@@ -2,15 +2,15 @@
 
 VERSION = 0.0.5
 
-PREFIX = ${DESTDIR}/usr/local
+PREFIX = /usr/local
 MANPREFIX = ${PREFIX}/share/man
 SRCPREFIX = ${PREFIX}/lib
 
-BINARY_PATH = ${PREFIX}/bin
-MAN_PATH = ${MANPREFIX}/man1
-SRC_PATH = ${SRCPREFIX}/bsp-layout
+BINARY_PATH = ${DESTDIR}${PREFIX}/bin
+MAN_PATH = ${DESTDIR}${MANPREFIX}/man1
+SRC_PATH = ${DESTDIR}${SRCPREFIX}/bsp-layout
 
-MANPAGE = ${MAN_PATH}/bsp-layout.1
+MANPAGE = ${DESTDIR}${MAN_PATH}/bsp-layout.1
 
 uninstall:
 	rm -f ${BINARY_PATH}/bsp-layout ${MAN_PATH}/bsp-layout.1
