@@ -30,7 +30,7 @@ Others can install it directly using the install script.
 
 **Note: Please read scripts like these before executing it on your machine**
 ```bash
-curl https://raw.githubusercontent.com/phenax/bsp-layout/master/install.sh | sh -;
+curl https://raw.githubusercontent.com/phenax/bsp-layout/master/install.sh | bash -;
 ```
 
 #### Clone and make
