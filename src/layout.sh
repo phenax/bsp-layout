@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-VERSION="{{VERSION}}";
+export VERSION="{{VERSION}}";
+export ROOT="{{SOURCE_PATH}}";
 
-export ROOT="/usr/lib/bsp-layout";
 source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/state.sh";
