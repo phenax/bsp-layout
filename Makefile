@@ -10,7 +10,7 @@ BINARY_PATH = ${DESTDIR}${PREFIX}/bin
 MAN_PATH = ${DESTDIR}${MANPREFIX}/man1
 SRC_PATH = ${DESTDIR}${SRCPREFIX}/bsp-layout
 
-MANPAGE = ${DESTDIR}${MAN_PATH}/bsp-layout.1
+MANPAGE = ${MAN_PATH}/bsp-layout.1
 
 uninstall:
 	rm -f ${BINARY_PATH}/bsp-layout ${MAN_PATH}/bsp-layout.1
