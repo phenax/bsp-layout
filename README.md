@@ -3,7 +3,8 @@ Manage layouts in bspwm (tall and wide)
 
 [BSPWM](https://github.com/baskerville/bspwm) does one thing and it does it well. It is a window manager. But some workflows require layout management to some extent. `bsp-layout` fills that gap.
 
-<a href="https://www.buymeacoffee.com/phenax"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-yellow.svg?style=flat-square" alt="Buy Me A Coffee donate button" /></a>
+> **[Looking for maintainers](https://github.com/phenax/bsp-layout/issues/27)**
+
 
 
 ### Dependencies
