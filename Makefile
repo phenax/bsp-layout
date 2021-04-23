@@ -1,6 +1,6 @@
 # bsp-layout
 
-VERSION = 0.0.5
+VERSION = 0.0.9
 
 PREFIX = /usr/local
 MANPREFIX = ${PREFIX}/share/man
