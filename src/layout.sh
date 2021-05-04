@@ -100,6 +100,7 @@ start_listener() {
     remove_listener "$selected_desktop";
     set_desktop_option $selected_desktop 'layout' "$layout";
     bspc desktop "$selected_desktop" -l "$layout";
+    bspc node @/ -E;
     exit 0;
   fi
 
