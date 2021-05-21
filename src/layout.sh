@@ -108,7 +108,7 @@ start_listener() {
   recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
-  bspc subscribe node_{add,remove,transfer}  | while read line; do
+  bspc subscribe node_{add,remove,transfer,flag,state}  | while read line; do
     event=$(echo "$line" | awk '{print $1}');
     arg_index=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
     desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
