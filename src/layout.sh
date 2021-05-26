@@ -45,7 +45,10 @@ run_layout() {
 }
 
 get_layout() {
-  local layout=$(get_desktop_options "$1" | valueof layout);
+  # Set desktop to currently focused desktop if option is not specified
+  local desktop="${1:-`get_focused_desktop`}";
+
+  local layout=$(get_desktop_options "$desktop" | valueof layout);
   echo "${layout:-"-"}";
 }
 
