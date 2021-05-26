@@ -32,7 +32,7 @@ remove_listener() {
 get_layout_file() {
   local layout_file="$LAYOUTS/$1.sh"; shift;
   # GUARD: Check if layout exists
-  [[ ! -f $layout_file ]] && echo "Layout does not exist" && exit 1;
+  [[ ! -f $layout_file ]] && echo "Layout [$layout_file] does not exist" && exit 1;
   echo "$layout_file";
 }
 
@@ -155,6 +155,7 @@ start_listener() {
 }
 
 once_layout() {
+  if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$@$"); then exit 0; fi
   run_layout "$@";
   run_layout "$@";
 }
