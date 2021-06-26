@@ -108,7 +108,7 @@ start_listener() {
   recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
-  bspc subscribe node_{add,remove,transfer,flag,state}  | while read line; do
+  bspc subscribe node_{add,remove,transfer,flag,state} desktop_focus | while read line; do
     event=$(echo "$line" | awk '{print $1}');
     arg_index=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
     desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
@@ -123,7 +123,24 @@ start_listener() {
 
         [[ "$source" != "$dest" ]] && recalculate_layout;
       else
-        recalculate_layout;
+        desk_file="/tmp/bsp-layout_desktop.txt"
+
+        if [ ! -f "$desk_file" ]; then
+          # create file
+          echo 2 > "$desk_file"
+        fi
+
+        if [[ "$event" == "desktop_focus" ]]; then
+          if [ "$(< /tmp/bsp-layout_desktop.txt)" == "1" ]; then
+            echo 0 > /tmp/bsp-layout_desktop.txt
+            recalculate_layout;
+          fi
+        else
+          if [[ "$(< /tmp/bsp-layout_desktop.txt)" == "0" || "$event" != "desktop_focus" ]]; then
+            echo 1 > /tmp/bsp-layout_desktop.txt
+            recalculate_layout;
+          fi
+        fi
       fi;
     fi;
   done &
