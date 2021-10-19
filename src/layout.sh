@@ -14,7 +14,7 @@ BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
 # Kill old layout process
 kill_layout() {
-  old_pid="$(get_desktop_options "$1" | valueof pid)";
+  local old_pid=$1;
   kill $old_pid 2> /dev/null || true;
 }
 
@@ -22,11 +22,14 @@ remove_listener() {
   desktop=$1;
   [[ -z "$desktop" ]] && desktop=$(get_focused_desktop);
 
-  kill_layout "$desktop";
+  local old_pid="$(get_desktop_options "$desktop" | valueof pid)";
 
   # Reset process id and layout
   set_desktop_option $desktop 'layout' "";
   set_desktop_option $desktop 'pid'    "";
+  set_desktop_option $desktop 'did'    "";
+
+  kill_layout $old_pid;
 }
 
 get_layout_file() {
@@ -108,13 +111,21 @@ start_listener() {
   recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
-  bspc subscribe node_{add,remove,transfer}  | while read line; do
+  bspc subscribe node_{add,remove,transfer} desktop_remove | while read line; do
     event=$(echo "$line" | awk '{print $1}');
     arg_index=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
     desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
     desktop_name=$(get_desktop_name_from_id "$desktop_id");
 
-    if [[ "$desktop_name" = "$selected_desktop" ]]; then
+    if [[ "$event" == "desktop_remove" ]]; then
+      selected_desktop_id=$(get_desktop_options "$selected_desktop" | valueof did);
+      if [[ "$desktop_id" == "$selected_desktop_id" ]]; then
+        remove_listener "$selected_desktop";
+        exit 0;
+      fi
+    fi
+
+    if [[ "$desktop_name" == "$selected_desktop" ]]; then
       initialize_layout;
 
       if [[ "$event" == "node_transfer" ]]; then
@@ -132,11 +143,14 @@ start_listener() {
   disown;
 
   # Kill old layout
-  kill_layout $selected_desktop;
+  local old_pid="$(get_desktop_options "$selected_desktop" | valueof pid)";
+  kill_layout $old_pid;
 
+  desktop_id=$(bspc query -D -d "$selected_desktop");
   # Set current layout
   set_desktop_option $selected_desktop 'layout' "$layout";
   set_desktop_option $selected_desktop 'pid'    "$LAYOUT_PID";
+  set_desktop_option $selected_desktop 'did'    "$desktop_id";
 
   # Setup
   initialize_layout;
