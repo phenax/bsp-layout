@@ -6,7 +6,7 @@ bsp-layout \- A dynamic layout manager for bspwm
 
 .SH SYNOPSIS
 .B bsp-layout
-.RB [set|once|get|cycle|remove|layouts|reload|version|help]
+.RB [set|once|get|previous|next|remove|layouts|reload|version|help]
 
 
 
@@ -32,9 +32,15 @@ in the desktop once and changes will not re-calculate layout. If desktop_name
 is not passed, it will apply layout to the currently focused desktop
 
 .TP
-.B cycle <layout> [--layouts tall,wide] [--desktop <desktop_name>]
-Cycle through a list of layouts. If layouts is not passed, the program will
-cycle through all available layouts. If desktop is not passed, it will apply
+.B previous <layout> [--layouts tall,wide] [--desktop <desktop_name>]
+Switch to the previous in a list of layouts. If layouts is not passed, the program will
+go through all available layouts. If desktop is not passed, it will apply
+layout to the currently focused desktop
+
+.TP
+.B next <layout> [--layouts tall,wide] [--desktop <desktop_name>]
+Switch to the next in a list of layouts. If layouts is not passed, the program will
+go through all available layouts. If desktop is not passed, it will apply
 layout to the currently focused desktop
 
 .TP

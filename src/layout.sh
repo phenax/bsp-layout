@@ -53,7 +53,37 @@ list_layouts() {
   echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//';
 }
 
-cycle_layouts() {
+previous_layout() {
+  local layouts=$(list_layouts);
+  local desktop_selector=$(get_focused_desktop);
+  while [[ $# != 0 ]]; do
+    case $1 in
+      --layouts)
+          if [[ ! -z "$2" ]]; then
+            layouts=$(echo "$2" | tr ',' '\n');
+          fi;
+          shift;
+      ;;
+      --desktop)
+        desktop_selector="$2";
+        shift;
+      ;;
+      *) ;;
+    esac;
+    shift;
+  done;
+
+  local current_layout=$(get_layout "$desktop_selector");
+  local previous_layout=$(echo -e "$layouts" | grep -x "$current_layout" -B 1 | head -n 1);
+  if [[ "$previous_layout" == "$current_layout" ]] || [[ -z "$previous_layout" ]]; then
+    previous_layout=$(echo -e "$layouts" | head -n 1);
+  fi;
+
+  echo "$current_layout:$previous_layout";
+  start_listener "$previous_layout" "$desktop_selector";
+}
+
+next_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
   while [[ $# != 0 ]]; do
@@ -174,7 +204,8 @@ case "$action" in
   reload)     reload_layouts ;;
   once)       once_layout "$@" ;;
   set)        start_listener "$@" ;;
-  cycle)      cycle_layouts "$@" ;;
+  previous)   previous_layout "$@" ;;
+  next)       next_layout "$@" ;;
   get)        get_layout "$@" ;;
   remove)     remove_listener "$1" ;;
   layouts)    list_layouts ;;

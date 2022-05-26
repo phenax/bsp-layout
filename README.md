@@ -165,23 +165,36 @@ This will apply the layout on the current set of nodes on that workspace but new
 bsp-layout once tall
 ```
 
-* Cycle through layouts
-Cycle through all (or a custom list of) layouts.
+* Go back through layouts
+Go back through all (or a custom list of) layouts.
 ```bash
-# Cycle through all layouts
-bsp-layout cycle
+# Switch to previous layout
+bsp-layout previous
 
-# Or to cycle through a custom list of layouts
-bsp-layout cycle --layouts tall,monocle,wide
+# Or to go back through a custom list of layouts
+bsp-layout previous --layouts tall,monocle,wide
 
 # For a specific desktop
-bsp-layout cycle --layouts tall,monocle,wide --desktop 4
+bsp-layout previous --layouts tall,monocle,wide --desktop 4
+```
+
+* Go through layouts
+Go through all (or a custom list of) layouts.
+```bash
+# Switch to next layout
+bsp-layout next
+
+# Or to go through a custom list of layouts
+bsp-layout next --layouts tall,monocle,wide
+
+# For a specific desktop
+bsp-layout next --layouts tall,monocle,wide --desktop 4
 ```
 
 * Toggle layout
 ```bash
 # Toggle between monocle and tall layouts
-bsp-layout cycle tall,monocle
+bsp-layout next tall,monocle
 ```
 
 
