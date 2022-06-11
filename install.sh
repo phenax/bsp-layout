@@ -11,7 +11,7 @@ fi
 sudo make install || exit 1;
 
 # Check for dependencies
-for dep in bc bspc; do
+for dep in bc bspc bash man; do
   !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed";
 done;
 
