@@ -186,6 +186,7 @@ start_listener() {
 
 once_layout() {
   if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$@$"); then exit 0; fi
+  setup_layout "$@";
   run_layout "$@";
   run_layout "$@";
 }
