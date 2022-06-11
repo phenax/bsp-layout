@@ -32,7 +32,7 @@ remove_listener() {
 get_layout_file() {
   local layout_file="$LAYOUTS/$1.sh"; shift;
   # GUARD: Check if layout exists
-  [[ ! -f $layout_file ]] && echo "Layout does not exist" && exit 1;
+  [[ ! -f $layout_file ]] && echo "Layout [$layout_file] does not exist" && exit 1;
   echo "$layout_file";
 }
 
@@ -45,7 +45,10 @@ run_layout() {
 }
 
 get_layout() {
-  local layout=$(get_desktop_options "$1" | valueof layout);
+  # Set desktop to currently focused desktop if option is not specified
+  local desktop="${1:-`get_focused_desktop`}";
+
+  local layout=$(get_desktop_options "$desktop" | valueof layout);
   echo "${layout:-"-"}";
 }
 
@@ -182,6 +185,7 @@ start_listener() {
 }
 
 once_layout() {
+  if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$@$"); then exit 0; fi
   run_layout "$@";
   run_layout "$@";
 }
