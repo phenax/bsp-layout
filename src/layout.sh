@@ -206,16 +206,16 @@ done;
 action=$1; shift;
 
 case "$action" in
-  reload)     reload_layouts ;;
-  once)       once_layout "$@" ;;
-  set)        start_listener "$@" ;;
-  previous)   previous_layout "$@" ;;
-  next)       next_layout "$@" ;;
-  get)        get_layout "$@" ;;
-  remove)     remove_listener "$1" ;;
-  layouts)    list_layouts ;;
-  help)       man bsp-layout ;;
-  version)    echo "$VERSION" ;;
-  *)          echo -e "Unknown subcommand. Run bsp-layout help" && exit 1 ;;
+  reload)            reload_layouts ;;
+  once)              once_layout "$@" ;;
+  set)               start_listener "$@" ;;
+  previous)          previous_layout "$@" ;;
+  next)              next_layout "$@" ;;
+  get)               get_layout "$@" ;;
+  remove)            remove_listener "$1" ;;
+  layouts)           list_layouts ;;
+  -h|--help|help)    man bsp-layout ;;
+  -v|version)        echo "$VERSION" ;;
+  *)                 echo -e "Unknown subcommand. Run bsp-layout help" && exit 1 ;;
 esac
 

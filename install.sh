@@ -8,7 +8,9 @@ if [[ ! "$1" == "local" ]]; then
   cd $TMP_DIR;
 fi
 
-sudo make install || exit 1;
+VERSION=$(git describe --tags --abbrev=0);
+
+sudo make VERSION="$VERSION" install || exit 1;
 
 # Check for dependencies
 for dep in bc bspc bash man; do
