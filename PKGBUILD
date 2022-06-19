@@ -18,7 +18,6 @@ md5sums=('SKIP')
 
 package() {
   cd "$pkgname-$pkgver";
-  sudo ./install.sh local;
-  #make PREFIX=/usr DESTDIR="$pkgdir" install
+  sudo make VERSION="$pkgver-$pkgrel" PREFIX=/usr/local install
 }
 
