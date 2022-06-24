@@ -1,0 +1,72 @@
+---
+name: 📝 Bug Report
+description: Report something that isn't working as intended
+labels: ["bug", "needs-triage"]
+body:
+- type: markdown
+  attributes:
+    value: |
+      **Before you proceed, please ensure your issue:**
+
+      - Wasn't already reported on [our issue tracker](https://github.com/phenax/bsp-layout/issues),
+      - Is somewhat reproducible.
+- type: textarea
+  attributes:
+    label: What did you expect to happen?
+    placeholder: When I do X, it should do Y.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: What actually happened?
+    description: |
+      - Screenshots, screencasts and gifs are a big help! They can be shared using [asciinema.org](https://asciinema.org) for the terminal or [imgur.com](https://imgur.com) for videos.
+      - **Use [code fences](https://docs.github.com/en/github/writing-on-github/creating-and-highlighting-code-blocks) for code, logs, or text dumps!** Or use [pastebin.com](https://pastebin.com)!
+      - Be specific! Phrases like "X does not work" or "X stopped working" are unacceptable.
+    placeholder: |
+      When I do X, Z happened instead of Y.
+
+      And here is the log: https://pastebin.com/fakeurl
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Describe your attempts to resolve the issue
+    description: |
+      How have you tried to fix your issue? What was the result?
+
+      _(Hint: use [code fences](https://docs.github.com/en/github/writing-on-github/creating-and-highlighting-code-blocks) for code or text dumps!)_
+    placeholder: |
+      I tried setting X to Y, then I tried Z. Here's what else I tried...
+
+      ```bash
+      bsp-layout get
+      ```
+- type: textarea
+  attributes:
+    label: Steps to reproduce
+    description: |
+      How do we reproduce your issue? Walk us through a minimal test case.
+
+      > :warning: This is required! If you can't offer steps to reproduce it, it will be hard for us to help you...
+    placeholder: |
+      1. Open a terminal
+      2. Open a few windows on a different desktop
+      3. Run `bsp-layout once even`
+      4. My computer explodes
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: System Information
+    placeholder: |
+      ```bash
+      $ bsp-layout version
+      0.0.10-1
+      ```
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: |
+      :heart: **Thank you for taking the time to file this bug report!**
