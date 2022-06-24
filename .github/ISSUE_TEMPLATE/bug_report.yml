@@ -59,7 +59,18 @@ body:
 - type: textarea
   attributes:
     label: System Information
+    description: |
+      Please give us a bit more information about the system you are using and the version of `bsp-layout` you are running.
+
+      Do you use bsp-layout or bsp-layout-git from the AUR? Did you install it with nixpkgs, make install or the install.sh script?
     placeholder: |
+      I installed the `bsp-layout` command with `sudo make PREFIX=/usr/ install`.
+
+      ```bash
+      $ uname -osrm
+      Linux 5.18.5-arch1-1 x86_64 GNU/Linux
+      ```
+
       ```bash
       $ bsp-layout version
       0.0.10-1
