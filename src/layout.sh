@@ -137,26 +137,26 @@ start_listener() {
     exit 0;
   fi
 
-  initialize_layout() { setup_layout $layout $args 2> /dev/null || true; }
-  recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
+  __initialize_layout() { setup_layout $layout $args 2> /dev/null || true; }
+  __recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
-  bspc subscribe node_{add,remove,transfer}  | while read line; do
+  bspc subscribe node_{add,remove,transfer} desktop_focus | while read line; do
     event=$(echo "$line" | awk '{print $1}');
     arg_index=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3");
     desktop_id=$(echo "$line" | awk "{print \$$arg_index}");
     desktop_name=$(get_desktop_name_from_id "$desktop_id");
 
     if [[ "$desktop_name" = "$selected_desktop" ]]; then
-      initialize_layout;
+      __initialize_layout;
 
       if [[ "$event" == "node_transfer" ]]; then
         local source=$(echo "$line" | awk '{print $3}');
         local dest=$(echo "$line" | awk '{print $6}');
 
-        [[ "$source" != "$dest" ]] && recalculate_layout;
+        [[ "$source" != "$dest" ]] && __recalculate_layout;
       else
-        recalculate_layout;
+        __recalculate_layout;
       fi;
     fi;
   done &
@@ -171,24 +171,44 @@ start_listener() {
   set_desktop_option $selected_desktop 'layout' "$layout";
   set_desktop_option $selected_desktop 'pid'    "$LAYOUT_PID";
 
-  # Setup
-  initialize_layout;
-
   # Recalculate styles as soon as they are set if it is on the selected desktop
   if [[ "$(get_focused_desktop)" == "$selected_desktop" ]]; then
+    # Setup
+    __initialize_layout;
+
     # Calculate layout twice to ensure rotations are corrected from previous layout
-    recalculate_layout;
-    recalculate_layout;
+    __recalculate_layout;
+    __recalculate_layout;
   fi;
 
   echo "[$LAYOUT_PID]";
 }
 
 once_layout() {
-  if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$@$"); then exit 0; fi
-  setup_layout "$@";
-  run_layout "$@";
-  run_layout "$@";
+  if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$1$"); then exit 0; fi
+  local focused_desktop=$(get_focused_desktop);
+  local selected_desktop="${2:-$focused_desktop}";
+
+  __calculate_layout() {
+    setup_layout "$@";
+    run_layout "$@";
+    run_layout "$@";
+  }
+
+  if [[ "$selected_desktop" != "$focused_desktop" ]]; then
+    bspc subscribe desktop_focus | while read line; do
+      event=$(echo "$line" | awk '{print $1}');
+      desktop_id=$(echo "$line" | awk '{print $3}');
+      desktop_name=$(get_desktop_name_from_id "$desktop_id");
+
+      if [[ "$desktop_name" = "$selected_desktop" ]]; then
+        __calculate_layout "$@";
+        exit 0
+      fi;
+    done & disown;
+  else
+    __calculate_layout "$@";
+  fi;
 }
 
 reload_layouts() {
