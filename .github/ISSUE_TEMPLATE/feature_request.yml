@@ -1,0 +1,40 @@
+---
+name: 📝 Feature Request
+description: Propose a new idea or feature
+labels: ["feature", "needs-triage"]
+body:
+- type: markdown
+  attributes:
+    value: |
+      **Before you proceed, please ensure your request:**
+
+      - Is a feature request and not a bug report,
+      - Hasn't already been requested or reported on [our issue tracker](https://github.com/phenax/bsp-layout/issues),
+      - Hasn't already been fulfilled in latest versions of bsp-layout.
+- type: textarea
+  attributes:
+    label: Describe your request
+    placeholder: |
+      I'd like bsp-layout to send notifications when switching from layout to layout.
+
+      This would give some visual and maybe even auditive feedback when running bsp-layout on key bindings.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Briefly explain its use-case
+    description: |
+      How would your requested feature be used? Can you demonstrate it with a screencast or a visual document?
+    placeholder: |
+      1. Install Linux
+      2. Install bspwm
+      3. Install bsp-layout
+      4. Run `bsp-layout {once,set} {desktop}`
+      5. Get a notification
+      6. Ponder why my machine just exploded
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: |
+      :heart: **Thank you for taking the time to make this feature request!**
