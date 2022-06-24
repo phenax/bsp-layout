@@ -26,12 +26,9 @@ body:
     description: |
       How would your requested feature be used? Can you demonstrate it with a screencast or a visual document?
     placeholder: |
-      1. Install Linux
-      2. Install bspwm
-      3. Install bsp-layout
-      4. Run `bsp-layout {once,set} {desktop}`
-      5. Get a notification
-      6. Ponder why my machine just exploded
+      1. Install bsp-layout
+      2. Run `bsp-layout set even {desktop}`
+      3. Get a notification saying "Desktop {desktop} now set to the even layout"
   validations:
     required: true
 - type: markdown
