@@ -171,11 +171,11 @@ start_listener() {
   set_desktop_option $selected_desktop 'layout' "$layout";
   set_desktop_option $selected_desktop 'pid'    "$LAYOUT_PID";
 
-  # Setup
-  __initialize_layout;
-
   # Recalculate styles as soon as they are set if it is on the selected desktop
   if [[ "$(get_focused_desktop)" == "$selected_desktop" ]]; then
+    # Setup
+    __initialize_layout;
+
     # Calculate layout twice to ensure rotations are corrected from previous layout
     __recalculate_layout;
     __recalculate_layout;
