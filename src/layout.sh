@@ -164,13 +164,13 @@ start_listener() {
         fi
 
         if [[ "$event" == "desktop_focus" ]]; then
-          if [ "$(< /tmp/bsp-layout_desktop.txt)" == "1" ]; then
-            echo 0 > /tmp/bsp-layout_desktop.txt
+          if [ "$(< "$desk_file")" == "1" ]; then
+            echo 0 > "$desk_file"
             __recalculate_layout;
           fi
         else
-          if [[ "$(< /tmp/bsp-layout_desktop.txt)" == "0" || "$event" != "desktop_focus" ]]; then
-            echo 1 > /tmp/bsp-layout_desktop.txt
+          if [[ "$(< "$desk_file")" == "0" || "$event" != "desktop_focus" ]]; then
+            echo 1 > "$desk_file"
             __recalculate_layout;
           fi
         fi
