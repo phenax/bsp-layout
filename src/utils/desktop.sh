@@ -4,27 +4,15 @@ source "$ROOT/utils/config.sh";
 names="--names"
 [[ $USE_NAMES -eq 0 ]] && names="";
 
-# :: -> str
+# -> str
 get_focused_desktop() {
-  # Get the name of the focused desktop.
-  #
-  # Args:
-  #   ()
-  #
-  # Returns:
-  #   desktop: the name of the focused desktop.
-  #
-    bspc query -D -d 'focused' $names;
+    local desktop=$(bspc query -D -d 'focused' $names);
+    echo "$desktop";
 }
 
 # int -> str
 get_desktop_name_from_id() {
-  # Get the name of the desktop whose ID is the one given as argument.
-  #
-  # Args:
-  #   $1: the id of the desktop.
-  #
-  # Returns:
-  #   desktop_name: the name of the desktop.
-    bspc query -D -d "$1" $names;
+    local id=$1;
+    local desktop_name=$(bspc query -D -d "$id" $names);
+    echo "$desktop_name";
 }

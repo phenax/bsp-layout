@@ -9,16 +9,8 @@ master_size=$WIDE_RATIO;
 
 node_filter="!hidden";
 
-# List[str] -> ::
+# List[str] ->
 execute_layout() {
-  # Execute the wide layout.
-  #
-  # Args:
-  #   $@: the list of arguments required by the layout.
-  #
-  # Returns:
-  #   ()
-  #
   while [[ ! "$#" == 0 ]]; do
     case "$1" in
       --master-size) master_size="$2"; shift; ;;

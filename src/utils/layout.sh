@@ -1,18 +1,9 @@
 # import the lib.
 source "$ROOT/utils/common.sh";
 
-# (str, str, int) -> ::
+# (str, str, int) ->
 rotate() {
-  # Amend the split type so we are arranged correctly
-  #
-  # Args:
-  #   $1: the node to apply the rotation to.
-  #   $2: the orientation that we want.
-  #   $3: the angle of rotation.
-  #
-  # Returns:
-  #   ()
-  #
+  # Amend the split type so we are arranged correctly.
   node=$1;
   want=$2;
   have=$(jget splitType "$(bspc query -T -n "$node")");
@@ -24,15 +15,9 @@ rotate() {
   fi
 }
 
-# str -> ::
+# str ->
 auto_balance() {
   # Balance the tree rooted at some node automatically.
-  #
-  # Args:
-  #   $1: the root node to balance the tree.
-  #
-  # Returns:
-  #   ()
-  #
-  bspc node "$1" -B;
+  local node=$1;
+  bspc node "$node" -B;
 }

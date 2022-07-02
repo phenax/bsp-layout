@@ -3,30 +3,14 @@
 # import the lib.
 source "$ROOT/utils/layout.sh";
 
-# :: -> ::
+# ->
 setup_layout() {
-  # Setup the grid layout.
-  #
-  # Args:
-  #   ()
-  #
-  # Returns:
-  #   ()
-  #
   rotate '@/' horizontal 90;
   rotate '@/2' vertical 90;
 }
 
-# :: -> ::
+# ->
 execute_layout() {
-  # Execute the grid layout.
-  #
-  # Args:
-  #   ()
-  #
-  # Returns:
-  #   ()
-  #
   local target='first';
 
   for node in $(bspc query -N -n .local.window | sort); do
