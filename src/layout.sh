@@ -15,17 +15,15 @@ export LAYOUTS="$ROOT/layouts";
 # Layouts provided by bsp out of the box
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
-# str -> ()
+# desktop -> ()
 kill_old_layout() {
-  local name=$1;
-  old_pid="$(get_desktop_options "$name" | get_value_of pid)";
+  old_pid="$(get_desktop_options "$1" | get_value_of pid)";
   kill $old_pid 2> /dev/null || true;
 }
 
-# [str] -> ()
+# [desktop] -> ()
 remove_listener() {
-  local desktop=$1;
-  desktop="${desktop:-`get_focused_desktop`}";
+  desktop="${1:-`get_focused_desktop`}";
 
   kill_old_layout "$desktop";
 
@@ -34,47 +32,43 @@ remove_listener() {
   set_desktop_option $desktop 'pid'    "";
 }
 
-# str -> str
+# layout -> filename
 get_layout_file() {
-  local name=$1; shift 1;
-  local layout_file="$LAYOUTS/$name.sh";
+  local layout_file="$LAYOUTS/$1.sh";
   # GUARD: Check if layout exists
   [[ ! -f $layout_file ]] && echo "Layout [$layout_file] does not exist" && exit 1;
   echo "$layout_file";
 }
 
-# (str, List[str]) -> ()
+# (layout, List[args]) -> ()
 setup_layout() {
-  local name=$1;
-  bash "$(get_layout_file $name)" setup $*;
+  bash "$(get_layout_file $1)" setup $*;
 }
 
-# (str, List[str]) -> ()
+# (layout, List[args]) -> ()
 run_layout() {
-  local name=$1
   local old_scheme=$(bspc config automatic_scheme);
   bspc config automatic_scheme alternate;
-  bash "$(get_layout_file $name)" run $*;
+  bash "$(get_layout_file $1)" run $*;
   bspc config automatic_scheme $old_scheme;
 }
 
-# [str] -> str
+# [desktop] -> layout
 get_layout() {
   # Set desktop to currently focused desktop if option is not specified
-  local desktop=$1;
-  desktop="${desktop:-`get_focused_desktop`}";
+  desktop="${1:-`get_focused_desktop`}";
 
   local layout=$(get_desktop_options "$desktop" | get_value_of layout);
   echo "${layout:-"-"}";
 }
 
-# () -> List[str]
+# () -> List[layout]
 list_layouts() {
   local layouts=$(echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//')
   echo -e "$layouts"
 }
 
-# List[str] -> ()
+# List[layout] -> ()
 previous_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
@@ -105,7 +99,7 @@ previous_layout() {
   start_listener "$previous_layout" "$desktop_selector";
 }
 
-# List[str] -> ()
+# List[layout] -> ()
 next_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
@@ -136,7 +130,7 @@ next_layout() {
   start_listener "$next_layout" "$desktop_selector";
 }
 
-# List[str] -> ()
+# List[args] -> ()
 start_listener() {
   layout=$1; shift;
   selected_desktop=$1; shift;
@@ -207,7 +201,7 @@ start_listener() {
   echo "[$LAYOUT_PID]";
 }
 
-# List[str] -> ()
+# List[args] -> ()
 once_layout() {
   if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$1$"); then exit 0; fi
   local focused_desktop=$(get_focused_desktop);
@@ -244,7 +238,7 @@ reload_layouts() {
   done;
 }
 
-# List[str] -> ()
+# List[args] -> ()
 main () {
   check_dependencies
 

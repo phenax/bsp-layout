@@ -1,7 +1,7 @@
 # import the lib.
 source "$ROOT/utils/common.sh";
 
-# (str, str, int) -> ()
+# (node, want, angle) -> ()
 rotate() {
   # Amend the split type so we are arranged correctly.
   node=$1;
@@ -15,9 +15,8 @@ rotate() {
   fi
 }
 
-# str -> ()
+# node -> ()
 auto_balance() {
   # Balance the tree rooted at some node automatically.
-  local node=$1;
-  bspc node "$node" -B;
+  bspc node "$1" -B;
 }

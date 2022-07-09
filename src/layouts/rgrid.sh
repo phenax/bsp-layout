@@ -9,7 +9,7 @@ setup_layout() {
   rotate '@/2' horizontal 90;
 }
 
-# List[str] -> ()
+# List[args] -> ()
 execute_layout() {
   bash "$ROOT/layouts/grid.sh" run $*;
 }
