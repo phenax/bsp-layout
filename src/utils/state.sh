@@ -1,14 +1,14 @@
 # The location where the states of the desktops are stored.
 DESKTOP_STATE="/tmp/bsp-layout.state/desktops";
 
-# (|Dict[str, str]|, str, str) -> Dict(str)
+# Dict[str, str] | (str, str) -> Dict(str)
 append_option() {
   local key=$1;
   local value=$2;
   sed "/^$key:/d"; echo "$key:$value";
 }
 
-# (|Dict[str, str]|, str) -> str
+# Dict[str, str] | str -> str
 get_value_of() {
   local key=$1;
   awk -F':' "/^$key:/ {print \$2}";
