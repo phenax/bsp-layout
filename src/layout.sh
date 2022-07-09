@@ -8,6 +8,7 @@ export ROOT="{{SOURCE_PATH}}";
 source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/state.sh";
+source "$ROOT/utils/common.sh";
 
 export LAYOUTS="$ROOT/layouts";
 
@@ -245,10 +246,7 @@ reload_layouts() {
 
 # List[str] ->
 main () {
-  # Check for dependencies.
-  for dep in bc bspc man; do
-    !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed" && exit 1;
-  done;
+  check_dependencies
 
   # parse the argument and run the appropriate subcommand.
   action=$1; shift;
