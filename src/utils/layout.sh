@@ -1,7 +1,7 @@
 # import the lib.
 source "$ROOT/utils/common.sh";
 
-# (str, str, int) ->
+# (str, str, int) -> ()
 rotate() {
   # Amend the split type so we are arranged correctly.
   node=$1;
@@ -15,7 +15,7 @@ rotate() {
   fi
 }
 
-# str ->
+# str -> ()
 auto_balance() {
   # Balance the tree rooted at some node automatically.
   local node=$1;

@@ -9,7 +9,7 @@ master_size=$WIDE_RATIO;
 
 node_filter="!hidden";
 
-# List[str] ->
+# List[str] -> ()
 execute_layout() {
   while [[ ! "$#" == 0 ]]; do
     case "$1" in

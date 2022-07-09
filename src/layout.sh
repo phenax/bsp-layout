@@ -15,14 +15,14 @@ export LAYOUTS="$ROOT/layouts";
 # Layouts provided by bsp out of the box
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
-# str ->
+# str -> ()
 kill_old_layout() {
   local name=$1;
   old_pid="$(get_desktop_options "$name" | get_value_of pid)";
   kill $old_pid 2> /dev/null || true;
 }
 
-# [str] ->
+# [str] -> ()
 remove_listener() {
   local desktop=$1;
   desktop="${desktop:-`get_focused_desktop`}";
@@ -43,13 +43,13 @@ get_layout_file() {
   echo "$layout_file";
 }
 
-# (str, List[str]) ->
+# (str, List[str]) -> ()
 setup_layout() {
   local name=$1;
   bash "$(get_layout_file $name)" setup $*;
 }
 
-# (str, List[str]) ->
+# (str, List[str]) -> ()
 run_layout() {
   local name=$1
   local old_scheme=$(bspc config automatic_scheme);
@@ -68,13 +68,13 @@ get_layout() {
   echo "${layout:-"-"}";
 }
 
-# -> List[str]
+# () -> List[str]
 list_layouts() {
   local layouts=$(echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//')
   echo -e "$layouts"
 }
 
-# List[str] ->
+# List[str] -> ()
 previous_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
@@ -105,7 +105,7 @@ previous_layout() {
   start_listener "$previous_layout" "$desktop_selector";
 }
 
-# List[str] ->
+# List[str] -> ()
 next_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
@@ -136,7 +136,7 @@ next_layout() {
   start_listener "$next_layout" "$desktop_selector";
 }
 
-# List[str] ->
+# List[str] -> ()
 start_listener() {
   layout=$1; shift;
   selected_desktop=$1; shift;
@@ -207,7 +207,7 @@ start_listener() {
   echo "[$LAYOUT_PID]";
 }
 
-# List[str] ->
+# List[str] -> ()
 once_layout() {
   if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$1$"); then exit 0; fi
   local focused_desktop=$(get_focused_desktop);
@@ -236,7 +236,7 @@ once_layout() {
   fi;
 }
 
-# ->
+# () -> ()
 reload_layouts() {
   list_desktops | while read desktop; do
     layout=$(get_desktop_options "$desktop" | get_value_of layout);
@@ -244,7 +244,7 @@ reload_layouts() {
   done;
 }
 
-# List[str] ->
+# List[str] -> ()
 main () {
   check_dependencies
 

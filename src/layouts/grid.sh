@@ -3,13 +3,13 @@
 # import the lib.
 source "$ROOT/utils/layout.sh";
 
-# ->
+# () -> ()
 setup_layout() {
   rotate '@/' horizontal 90;
   rotate '@/2' vertical 90;
 }
 
-# ->
+# () -> ()
 execute_layout() {
   local target='first';
 

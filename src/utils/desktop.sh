@@ -4,7 +4,7 @@ source "$ROOT/utils/config.sh";
 names="--names"
 [[ $USE_NAMES -eq 0 ]] && names="";
 
-# -> str
+# () -> str
 get_focused_desktop() {
     local desktop=$(bspc query -D -d 'focused' $names);
     echo "$desktop";

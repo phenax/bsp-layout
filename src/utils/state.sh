@@ -20,7 +20,7 @@ get_desktop_options() {
   cat "$DESKTOP_STATE/$desktop" 2> /dev/null || true;
 }
 
-# (str, str, str) ->
+# (str, str, str) -> ()
 set_desktop_option() {
   local desktop=$1;
   local key=$2;
@@ -30,7 +30,7 @@ set_desktop_option() {
   echo "$new_options" > "$DESKTOP_STATE/$desktop";
 }
 
-# -> List[str]
+# () -> List[str]
 list_desktops() {
   local desktops=$(ls -1 "$DESKTOP_STATE");
   echo -e "$desktops";
