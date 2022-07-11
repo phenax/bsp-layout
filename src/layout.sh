@@ -16,7 +16,7 @@ export LAYOUTS="$ROOT/layouts";
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
 # desktop -> ()
-kill_old_layout() {
+kill_layout() {
   old_pid="$(get_desktop_options "$1" | get_value_of pid)";
   kill $old_pid 2> /dev/null || true;
 }
@@ -25,7 +25,7 @@ kill_old_layout() {
 remove_listener() {
   desktop="${1:-`get_focused_desktop`}";
 
-  kill_old_layout "$desktop";
+  kill_layout "$desktop";
 
   # Reset process id and layout
   set_desktop_option $desktop 'layout' "";
@@ -182,7 +182,7 @@ start_listener() {
   disown;
 
   # Kill old layout
-  kill_old_layout $selected_desktop;
+  kill_layout $selected_desktop;
 
   # Set current layout
   set_desktop_option $selected_desktop 'layout' "$layout";
