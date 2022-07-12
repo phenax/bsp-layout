@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# import the lib.
 source "$ROOT/utils/common.sh";
 source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/config.sh";
@@ -8,6 +9,7 @@ master_size=$TALL_RATIO;
 
 node_filter="!hidden";
 
+# List[args] -> ()
 execute_layout() {
   while [[ ! "$#" == 0 ]]; do
     case "$1" in

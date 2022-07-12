@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+# import the lib.
 source "$ROOT/utils/layout.sh";
 
+# () -> ()
 execute_layout() {
   auto_balance '@/';
 }

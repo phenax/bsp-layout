@@ -1,26 +1,29 @@
 #!/usr/bin/env bash
 
+# global compilation variables that are set with `make`.
 export VERSION="{{VERSION}}";
 export ROOT="{{SOURCE_PATH}}";
 
+# source the lib's tool functions.
 source "$ROOT/utils/desktop.sh";
 source "$ROOT/utils/layout.sh";
 source "$ROOT/utils/state.sh";
+source "$ROOT/utils/common.sh";
 
 export LAYOUTS="$ROOT/layouts";
 
 # Layouts provided by bsp out of the box
 BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
-# Kill old layout process
+# desktop -> ()
 kill_layout() {
-  old_pid="$(get_desktop_options "$1" | valueof pid)";
+  old_pid="$(get_desktop_options "$1" | get_value_of pid)";
   kill $old_pid 2> /dev/null || true;
 }
 
+# [desktop] -> ()
 remove_listener() {
-  desktop=$1;
-  [[ -z "$desktop" ]] && desktop=$(get_focused_desktop);
+  desktop="${1:-`get_focused_desktop`}";
 
   kill_layout "$desktop";
 
@@ -29,14 +32,20 @@ remove_listener() {
   set_desktop_option $desktop 'pid'    "";
 }
 
+# layout -> filename
 get_layout_file() {
-  local layout_file="$LAYOUTS/$1.sh"; shift;
+  local layout_file="$LAYOUTS/$1.sh";
   # GUARD: Check if layout exists
   [[ ! -f $layout_file ]] && echo "Layout [$layout_file] does not exist" && exit 1;
   echo "$layout_file";
 }
 
-setup_layout() { bash "$(get_layout_file $1)" setup $*; }
+# (layout, List[args]) -> ()
+setup_layout() {
+  bash "$(get_layout_file $1)" setup $*;
+}
+
+# (layout, List[args]) -> ()
 run_layout() {
   local old_scheme=$(bspc config automatic_scheme);
   bspc config automatic_scheme alternate;
@@ -44,18 +53,22 @@ run_layout() {
   bspc config automatic_scheme $old_scheme;
 }
 
+# [desktop] -> layout
 get_layout() {
   # Set desktop to currently focused desktop if option is not specified
-  local desktop="${1:-`get_focused_desktop`}";
+  desktop="${1:-`get_focused_desktop`}";
 
-  local layout=$(get_desktop_options "$desktop" | valueof layout);
+  local layout=$(get_desktop_options "$desktop" | get_value_of layout);
   echo "${layout:-"-"}";
 }
 
+# () -> List[layout]
 list_layouts() {
-  echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//';
+  local layouts=$(echo -e "$BSP_DEFAULT_LAYOUTS"; ls "$LAYOUTS" | sed -e 's/\.sh$//')
+  echo -e "$layouts"
 }
 
+# List[layout] -> ()
 previous_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
@@ -86,6 +99,7 @@ previous_layout() {
   start_listener "$previous_layout" "$desktop_selector";
 }
 
+# List[layout] -> ()
 next_layout() {
   local layouts=$(list_layouts);
   local desktop_selector=$(get_focused_desktop);
@@ -116,6 +130,7 @@ next_layout() {
   start_listener "$next_layout" "$desktop_selector";
 }
 
+# List[args] -> ()
 start_listener() {
   layout=$1; shift;
   selected_desktop=$1; shift;
@@ -137,7 +152,9 @@ start_listener() {
     exit 0;
   fi
 
+  # ->
   __initialize_layout() { setup_layout $layout $args 2> /dev/null || true; }
+  # ->
   __recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
@@ -184,11 +201,13 @@ start_listener() {
   echo "[$LAYOUT_PID]";
 }
 
+# List[args] -> ()
 once_layout() {
   if (echo -e "$BSP_DEFAULT_LAYOUTS" | grep "^$1$"); then exit 0; fi
   local focused_desktop=$(get_focused_desktop);
   local selected_desktop="${2:-$focused_desktop}";
 
+  # List[str] ->
   __calculate_layout() {
     setup_layout "$@";
     run_layout "$@";
@@ -211,31 +230,33 @@ once_layout() {
   fi;
 }
 
+# () -> ()
 reload_layouts() {
   list_desktops | while read desktop; do
-    layout=$(get_desktop_options "$desktop" | valueof layout);
+    layout=$(get_desktop_options "$desktop" | get_value_of layout);
     [[ ! -z "$layout" ]] && start_listener $layout $desktop;
   done;
 }
 
-# Check for dependencies
-for dep in bc bspc man; do
-  !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed" && exit 1;
-done;
+# List[args] -> ()
+main () {
+  check_dependencies
 
-action=$1; shift;
+  # parse the argument and run the appropriate subcommand.
+  action=$1; shift;
+  case "$action" in
+    reload)            reload_layouts ;;
+    once)              once_layout "$@" ;;
+    set)               start_listener "$@" ;;
+    previous)          previous_layout "$@" ;;
+    next)              next_layout "$@" ;;
+    get)               get_layout "$1" ;;
+    remove)            remove_listener "$1" ;;
+    layouts)           list_layouts ;;
+    -h|--help|help)    man bsp-layout ;;
+    -v|version)        echo "$VERSION" ;;
+    *)                 echo -e "Unknown subcommand. Run bsp-layout help" && exit 1 ;;
+  esac
+}
 
-case "$action" in
-  reload)            reload_layouts ;;
-  once)              once_layout "$@" ;;
-  set)               start_listener "$@" ;;
-  previous)          previous_layout "$@" ;;
-  next)              next_layout "$@" ;;
-  get)               get_layout "$@" ;;
-  remove)            remove_listener "$1" ;;
-  layouts)           list_layouts ;;
-  -h|--help|help)    man bsp-layout ;;
-  -v|version)        echo "$VERSION" ;;
-  *)                 echo -e "Unknown subcommand. Run bsp-layout help" && exit 1 ;;
-esac
-
+main "$@"
