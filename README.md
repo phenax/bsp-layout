@@ -138,7 +138,7 @@ bsp-layout help
 ```
 
 * Set a layout in desktop named 6
-Not specifying the layout will apply the layout on the focused desktop
+Not specifying the desktop will apply the layout on the focused desktop
 ```bash
 bsp-layout set tall 6
 ```
