@@ -92,7 +92,7 @@ previous_layout() {
   local current_layout=$(get_layout "$desktop_selector");
   local previous_layout=$(echo -e "$layouts" | grep -x "$current_layout" -B 1 | head -n 1);
   if [[ "$previous_layout" == "$current_layout" ]] || [[ -z "$previous_layout" ]]; then
-    previous_layout=$(echo -e "$layouts" | head -n 1);
+    previous_layout=$(echo -e "$layouts" | tail -n 1);
   fi;
 
   echo "$current_layout:$previous_layout";
