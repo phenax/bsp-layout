@@ -36,7 +36,7 @@ remove_listener() {
 get_layout_file() {
   local layout_file="$LAYOUTS/$1.sh"
   # GUARD: Check if layout exists
-  if [ -f $layout_file ]; then
+  if [ ! -f $layout_file ]; then
     echo "Layout [$layout_file] does not exist"
     exit 1
   fi
@@ -78,9 +78,7 @@ previous_layout() {
   while [[ $# != 0 ]]; do
     case $1 in
       --layouts)
-          if [ "$2" ]; then
-            layouts=$(echo "$2" | tr ',' '\n')
-          fi
+          [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
           shift
       ;;
       --desktop)
@@ -214,9 +212,9 @@ once_layout() {
   }
 
   if [[ "$selected_desktop" != "$focused_desktop" ]]; then
-    bspc subscribe desktop_focus | while read line; do
-      event=$(echo "$line" | awk '{print $1}')
-      desktop_id=$(echo "$line" | awk '{print $3}')
+    bspc subscribe desktop_focus | while read -a line; do
+      event="${line[0]}"
+      desktop_id="${line[2]}"
       desktop_name=$(get_desktop_name_from_id "$desktop_id")
 
       if [ "$desktop_name" = "$selected_desktop" ]; then
