@@ -28,8 +28,8 @@ remove_listener() {
   kill_layout "$desktop"
 
   # Reset process id and layout
-  set_desktop_option $desktop 'layout'
-  set_desktop_option $desktop 'pid'
+  set_desktop_option $desktop 'layout' ""
+  set_desktop_option $desktop 'pid' ""
 }
 
 # layout -> filename
