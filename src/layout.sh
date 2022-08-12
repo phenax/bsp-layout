@@ -179,7 +179,7 @@ start_listener() {
   local old_pid="$(get_desktop_options "$selected_desktop" | valueof pid)";
   kill_layout $old_pid;
 
-  desktop_id=$(bspc query -D -d "$selected_desktop");
+  desktop_id=$(get_desktop_id "$selected_desktop");
   # Set current layout
   set_desktop_option $selected_desktop 'layout' "$layout";
   set_desktop_option $selected_desktop 'pid'    "$LAYOUT_PID";
