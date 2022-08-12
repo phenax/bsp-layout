@@ -14,6 +14,13 @@ BSP_DEFAULT_LAYOUTS="tiled\nmonocle";
 
 # Kill old layout process
 kill_layout() {
+  old_pid="$(get_desktop_options "$1" | valueof pid)";
+  local old_pid=$1;
+  kill $old_pid 2> /dev/null || true;
+}
+
+# Kill old process
+kill_process() {
   local old_pid=$1;
   kill $old_pid 2> /dev/null || true;
 }
