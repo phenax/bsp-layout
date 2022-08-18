@@ -29,14 +29,17 @@ remove_listener() {
 
   # Reset process id and layout
   set_desktop_option $desktop 'layout' ""
-  set_desktop_option $desktop 'pid'    ""
+  set_desktop_option $desktop 'pid' ""
 }
 
 # layout -> filename
 get_layout_file() {
   local layout_file="$LAYOUTS/$1.sh"
   # GUARD: Check if layout exists
-  [[ ! -f $layout_file ]] && echo "Layout [$layout_file] does not exist" && exit 1
+  if [ ! -f $layout_file ]; then
+    echo "Layout [$layout_file] does not exist"
+    exit 1
+  fi
   echo "$layout_file"
 }
 
@@ -75,16 +78,13 @@ previous_layout() {
   while [[ $# != 0 ]]; do
     case $1 in
       --layouts)
-          if [[ ! -z "$2" ]]; then
-            layouts=$(echo "$2" | tr ',' '\n')
-          fi
+          [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
           shift
       ;;
       --desktop)
         desktop_selector="$2"
         shift
       ;;
-      *) ;;
     esac
     shift
   done
@@ -106,16 +106,13 @@ next_layout() {
   while [[ $# != 0 ]]; do
     case $1 in
       --layouts)
-          if [[ ! -z "$2" ]]; then
-            layouts=$(echo "$2" | tr ',' '\n')
-          fi
+          [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
           shift
       ;;
       --desktop)
         desktop_selector="$2"
         shift
       ;;
-      *) ;;
     esac
     shift
   done
@@ -139,7 +136,7 @@ start_listener() {
   args=$@
 
   # Set selected desktop to currently focused desktop if option is not specified
-  [[ -z "$selected_desktop" ]] && selected_desktop=$(get_focused_desktop)
+  [ "$selected_desktop" ] || selected_desktop=$(get_focused_desktop)
 
   bspc desktop "$selected_desktop" -l tiled
 
@@ -158,27 +155,27 @@ start_listener() {
   __recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
-  bspc subscribe node_{add,remove,transfer,flag,state} desktop_focus | while read line; do
-    event=$(echo "$line" | awk '{print $1}')
-    arg_index=$([[ "$event" == "node_transfer" ]] && echo "6" || echo "3")
-    desktop_id=$(echo "$line" | awk "{print \$$arg_index}")
+  bspc subscribe node_{add,remove,transfer,flag,state} desktop_focus | while read -a line; do
+    event="${line[0]}"
+    [ "$event" = "node_transfer" ] && arg_index="5" || arg_index="2"
+    desktop_id="${line[$arg_index]}"
     desktop_name=$(get_desktop_name_from_id "$desktop_id")
 
-    if [[ "$desktop_name" = "$selected_desktop" ]]; then
+    if [ "$desktop_name" = "$selected_desktop" ]; then
       __initialize_layout
 
-      if [[ "$event" == "node_transfer" ]]; then
-        local source=$(echo "$line" | awk '{print $3}')
-        local dest=$(echo "$line" | awk '{print $6}')
+      if [ "$event" = "node_transfer" ]; then
+        local source="${line[2]}"
+        local dest="${line[5]}"
 
-        [[ "$source" != "$dest" ]] && __recalculate_layout
+        [ "$source" != "$dest" ] && __recalculate_layout
       else
         __recalculate_layout
       fi
     fi
   done &
 
-  LAYOUT_PID=$!; # PID of the listener in the background
+  LAYOUT_PID=$! # PID of the listener in the background
   disown
 
   # Kill old layout
@@ -215,12 +212,12 @@ once_layout() {
   }
 
   if [[ "$selected_desktop" != "$focused_desktop" ]]; then
-    bspc subscribe desktop_focus | while read line; do
-      event=$(echo "$line" | awk '{print $1}')
-      desktop_id=$(echo "$line" | awk '{print $3}')
+    bspc subscribe desktop_focus | while read -a line; do
+      event="${line[0]}"
+      desktop_id="${line[2]}"
       desktop_name=$(get_desktop_name_from_id "$desktop_id")
 
-      if [[ "$desktop_name" = "$selected_desktop" ]]; then
+      if [ "$desktop_name" = "$selected_desktop" ]; then
         __calculate_layout "$@"
         exit 0
       fi
@@ -234,7 +231,7 @@ once_layout() {
 reload_layouts() {
   list_desktops | while read desktop; do
     layout=$(get_desktop_options "$desktop" | get_value_of layout)
-    [[ ! -z "$layout" ]] && start_listener $layout $desktop
+    [ "$layout" ] && start_listener $layout $desktop
   done
 }
 
