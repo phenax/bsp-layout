@@ -10,9 +10,7 @@ rotate() {
   have=${have:1:${#have}-2}
   angle=$3
 
-  if [[ "$have" != "$want" ]]; then
-    bspc node "$node" -R "$angle"
-  fi
+  [ "$have" = "$want" ] || bspc node "$node" -R "$angle"
 }
 
 # node -> ()

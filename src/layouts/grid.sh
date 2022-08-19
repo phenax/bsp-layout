@@ -15,15 +15,15 @@ execute_layout() {
 
   for node in $(bspc query -N -n .local.window | sort); do
     bspc node $node -n "$(bspc query -N -n @/${target})"
-    [[ "$target" == 'first' ]] && target='second' || target='first'
+    [ "$target" = "first" ] && target='second' || target='first'
   done
 
   auto_balance '@/'
 }
 
-cmd=$1; shift
+cmd=$1
+shift
 case "$cmd" in
   run) execute_layout "$@" ;;
   setup) setup_layout "$@" ;;
-  *) ;;
 esac
