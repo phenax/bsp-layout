@@ -14,9 +14,9 @@ execute_layout() {
   bash "$ROOT/layouts/grid.sh" run $*
 }
 
-cmd=$1; shift
+cmd=$1
+shift
 case "$cmd" in
   run) execute_layout "$@" ;;
   setup) setup_layout "$@" ;;
-  *) ;;
 esac

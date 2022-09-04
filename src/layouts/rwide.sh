@@ -26,9 +26,7 @@ execute_layout() {
   if [ $win_count -ne 1 ]; then
     local new_node=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1)
 
-    if [ -z "$new_node" ]; then
-      new_node=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1)
-    fi
+    [ -z "$new_node" ] && new_node=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1)
 
     local root=$(echo "$nodes" | head -n 1)
 
@@ -52,7 +50,7 @@ execute_layout() {
 
   local mon_height=$(jget height "$(bspc query -T -m)")
 
-  local want=$(echo "$master_size * $mon_height" | bc | sed 's/\..*//')
+  local want=$(( $master_size * $mon_height ))
   local have=$(jget height "$(bspc query -T -n '@/2')")
 
   bspc node '@/2' --resize top 0 $((have - want))

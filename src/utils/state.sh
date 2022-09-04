@@ -5,7 +5,8 @@ DESKTOP_STATE="/tmp/bsp-layout.state/desktops"
 append_option() {
   local key=$1
   local value=$2
-  sed "/^$key:/d"; echo "$key:$value"
+  sed "/^$key:/d"
+  echo "$key:$value"
 }
 
 # Dict[key, value] | key -> value
