@@ -10,7 +10,7 @@ jget() {
 
 # () -> ()
 check_dependencies () {
-  for dep in bc bspc man; do
+  for dep in bspc man; do
     !(which $dep >/dev/null 2>&1) && {
       echo "[Missing dependency] bsp-layout needs $dep installed"
       exit 1

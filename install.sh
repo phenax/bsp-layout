@@ -13,7 +13,7 @@ VERSION=$(git describe --tags --abbrev=0)
 sudo make VERSION="$VERSION" install || exit 1
 
 # Check for dependencies
-for dep in bc bspc bash man; do
+for dep in bspc bash man; do
   !(which $dep >/dev/null 2>&1) && echo "[Missing dependency] bsp-layout needs $dep installed"
 done
 
