@@ -157,11 +157,12 @@ start_listener() {
   # Then listen to node changes and recalculate as required
   bspc subscribe node_{add,remove,transfer,flag,state} desktop_focus | while read -a line; do
     event="${line[0]}"
+    node_id="${line[3]}"
     [ "$event" = "node_transfer" ] && arg_index="5" || arg_index="2"
     desktop_id="${line[$arg_index]}"
     desktop_name=$(get_desktop_name_from_id "$desktop_id")
 
-    if [ "$desktop_name" = "$selected_desktop" ]; then
+    if [ "$desktop_name" = "$selected_desktop" ] &&  bspc query -N -n "$node_id".!floating; then
       __initialize_layout
 
       if [ "$event" = "node_transfer" ]; then
