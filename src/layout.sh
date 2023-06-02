@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # global compilation variables that are set with `make`.
-export VERSION="{{VERSION}}"
-export ROOT="{{SOURCE_PATH}}"
+export VERSION="0.0.10-1"
+export ROOT="/usr/local/lib/bsp-layout"
 
 # source the lib's tool functions.
 source "$ROOT/utils/desktop.sh"
@@ -155,14 +155,49 @@ start_listener() {
   __recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
   # Then listen to node changes and recalculate as required
+  WAS_ADDED=""
   bspc subscribe node_{add,remove,transfer,flag,state} desktop_focus | while read -a line; do
     event="${line[0]}"
     node_id="${line[3]}"
-    [ "$event" = "node_transfer" ] && arg_index="5" || arg_index="2"
+    [ "$event" = "node_transfer" ] && arg_index="5" || arg_index="2" 
     desktop_id="${line[$arg_index]}"
     desktop_name=$(get_desktop_name_from_id "$desktop_id")
 
-    if [ "$desktop_name" = "$selected_desktop" ] &&  bspc query -N -n "$node_id".!floating; then
+    if [ "$event" = "node_add" ]; then
+      WAS_ADDED=1
+    fi
+
+    # maintain list of non-floating visible nodes to fix layout after tiled becomes floating
+    if [ "$event" != "node_state" ] || [ "$event" = "node_state" ] && [ "$WAS_ADDED" ]; then 
+      window_list=$(bspc query -N -n .local.!floating.!hidden) # update window list
+    fi
+
+    if [ "$event" != "node_add" ]; then
+      WAS_ADDED=""
+    fi
+    
+    # evaluate if node_id exist & is not floating 
+    #
+    # node_id has value at node_remove event, but bspc will return false \
+    # because node already doesn't exist
+    node_is_not_floating=1
+    if bspc query -N -n "$node_id" >/dev/null; then
+      if ! echo "$window_list" | grep "$node_id" >/dev/null; then
+        node_is_not_floating=""
+
+        # allow update layout when node becomes tiled
+        if bspc query -N -n "$node_id".!floating >/dev/null; then
+          window_list=$(bspc query -N -n .local.!floating.!hidden)
+          node_is_not_floating=1
+        fi
+      # allow update layout when node becomes floating
+      elif bspc query -N -n "$node_id".floating >/dev/null; then
+        window_list=$(bspc query -N -n .local.!floating.!hidden)
+        node_is_not_floating=1
+      fi
+    fi
+
+    if [ "$desktop_name" = "$selected_desktop" ] && [ "$node_is_not_floating" ]; then
       __initialize_layout
 
       if [ "$event" = "node_transfer" ]; then
