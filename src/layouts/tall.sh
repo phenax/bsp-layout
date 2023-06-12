@@ -7,7 +7,7 @@ source "$ROOT/utils/config.sh"
 
 master_size=$TALL_RATIO
 
-node_filter="!hidden"
+node_filter="!hidden.!floating"
 
 # List[args] -> ()
 execute_layout() {
@@ -20,18 +20,18 @@ execute_layout() {
   done
 
   # ensure the count of the master child is 1, or make it so
-  local nodes=$(bspc query -N '@/1' -n .descendant_of.window.$node_filter)
+  local nodes=$(bspc query -N '@/1' -n .local.window.$node_filter)
   local win_count=$(echo "$nodes" | wc -l)
 
   if [ $win_count -ne 1 ]; then
-    local new_node=$(bspc query -N '@/1' -n last.descendant_of.window.$node_filter | head -n 1)
+    local new_node=$(bspc query -N '@/1' -n last.local.window.$node_filter | head -n 1)
 
-    [ -z "$new_node" ] && new_node=$(bspc query -N '@/2' -n last.descendant_of.window.$node_filter | head -n 1)
+    [ -z "$new_node" ] && new_node=$(bspc query -N '@/2' -n last.local.window.$node_filter | head -n 1)
 
     local root=$(echo -e "$nodes" | head -n 1)
 
     # move everything into 2 that is not our new_node
-    for wid in $(bspc query -N '@/1' -n .descendant_of.window.$node_filter | grep -v $root); do
+    for wid in $(bspc query -N '@/1' -n .local.window.$node_filter | grep -v $root); do
       bspc node "$wid" -n '@/2'
     done
 
@@ -42,7 +42,7 @@ execute_layout() {
   rotate '@/2' horizontal 90
 
   local stack_node=$(bspc query -N '@/2' -n)
-  for parent in $(bspc query -N '@/2' -n .descendant_of.!window.$node_filter | grep -v $stack_node); do
+  for parent in $(bspc query -N '@/2' -n .local.!window.$node_filter | grep -v $stack_node); do
     rotate $parent horizontal 90
   done
 
@@ -54,6 +54,7 @@ execute_layout() {
   local have=$(jget width "$(bspc query -T -n '@/1')")
 
   bspc node '@/1' --resize right $((want - have)) 0
+  bspc node any.local -E
 }
 
 cmd=$1
