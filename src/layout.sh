@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # global compilation variables that are set with `make`.
-export VERSION="0.0.10-1"
-export ROOT="/usr/local/lib/bsp-layout"
+export VERSION="{{VERSION}}"
+export ROOT="{{SOURCE_PATH}}"
 
 # source the lib's tool functions.
 source "$ROOT/utils/desktop.sh"
@@ -78,13 +78,13 @@ previous_layout() {
   while [[ $# != 0 ]]; do
     case $1 in
       --layouts)
-          [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
-          shift
-      ;;
+        [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
+        shift
+        ;;
       --desktop)
         desktop_selector="$2"
         shift
-      ;;
+        ;;
     esac
     shift
   done
@@ -106,13 +106,13 @@ next_layout() {
   while [[ $# != 0 ]]; do
     case $1 in
       --layouts)
-          [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
-          shift
-      ;;
+        [ "$2" ] && layouts=$(echo "$2" | tr ',' '\n')
+        shift
+        ;;
       --desktop)
         desktop_selector="$2"
         shift
-      ;;
+        ;;
     esac
     shift
   done
@@ -154,47 +154,74 @@ start_listener() {
   # ->
   __recalculate_layout() { run_layout $layout $args 2> /dev/null || true; }
 
+  cache_node_was_added=""
+  cache_node_id=""
+  prev_node_state=""
+  shopt -s extglob # not sure if needed
   # Then listen to node changes and recalculate as required
-  WAS_ADDED=""
-  bspc subscribe node_{add,remove,transfer,flag,state} desktop_focus | while read -a line; do
+  bspc subscribe node_{add,remove,transfer,flag,state,geometry} desktop_focus | while read -a line; do
     event="${line[0]}"
-    node_id="${line[3]}"
-    [ "$event" = "node_transfer" ] && arg_index="5" || arg_index="2" 
+    [ "$event" = "node_transfer" ] && arg_index="5" || arg_index="2"
     desktop_id="${line[$arg_index]}"
     desktop_name=$(get_desktop_name_from_id "$desktop_id")
+    node_id="${line[3]}"
+    node_state="${line[4]}${line[5]}"
+    node_is_not_floating=""
 
     if [ "$event" = "node_add" ]; then
-      WAS_ADDED=1
+      cache_node_was_added=1
+      node_id="${line[4]}"
+      cache_node_id="$node_id"
     fi
 
     # maintain list of non-floating visible nodes to fix layout after tiled becomes floating
-    if [ "$event" != "node_state" ] || [ "$event" = "node_state" ] && [ "$WAS_ADDED" ]; then 
-      window_list=$(bspc query -N -n .local.!floating.!hidden) # update window list
+    #if [[ ("$event" != node_add && "$event" != node_state && "$event" != node_geometry) || ("$event" = node_state && "$node_state" != floatingon && "$prev_node_state") ]]; then
+    if [[ "$event" != @(node_add|node_state|node_geometry) || \
+        ("$event" = node_state && "$node_state" != floatingon && "$prev_node_state") ]]; then
+      new_window_list=$(bspc query -N -n .local.!floating.!hidden)
     fi
 
-    if [ "$event" != "node_add" ]; then
-      WAS_ADDED=""
-    fi
-    
-    # evaluate if node_id exist & is not floating 
-    #
-    # node_id has value at node_remove event, but bspc will return false \
-    # because node already doesn't exist
-    node_is_not_floating=1
-    if bspc query -N -n "$node_id" >/dev/null; then
-      if ! echo "$window_list" | grep "$node_id" >/dev/null; then
-        node_is_not_floating=""
+    if [[ "$event" = node_state && "$node_state" = floatingon && "$prev_node_state" ]]; then
+      # floating node was added
+      # remove all node info
+      prev_node_state="none"
+      cache_node_was_added=""
+      cache_node_id=""
+    elif [[ ("$event" = node_state && "$node_state" != floatingon && "$prev_node_state") || \
+        ("$event" != node_add && "$event" != node_geometry && -z "$cache_node_was_added") || \
+        ("$event" = node_geometry && "$cache_node_was_added") ]]; then
+      node_is_not_floating=1
 
-        # allow update layout when node becomes tiled
+      prev_node_state="none"
+      cache_node_was_added=""
+      if [ "$cache_node_id" ]; then
+        node_id="$cache_node_id"
+        cache_node_id=""
+      fi
+
+      # protection against floating node transfers
+      # evaluate if node_id exist & is not floating
+      #
+      # node_id has value at node_remove event, but bspc query $node_id \
+      # will return false because node already doesn't exist
+      if ! echo "$new_window_list" | grep -q "$node_id" && \
+         ! echo "$old_window_list" | grep -q "$node_id" ; then
+          node_is_not_floating=""
         if bspc query -N -n "$node_id".!floating >/dev/null; then
-          window_list=$(bspc query -N -n .local.!floating.!hidden)
+          # allow update layout when node becomes tiled
+          new_window_list=$(bspc query -N -n .local.!floating.!hidden)
           node_is_not_floating=1
         fi
-      # allow update layout when node becomes floating
-      elif bspc query -N -n "$node_id".floating >/dev/null; then
-        window_list=$(bspc query -N -n .local.!floating.!hidden)
-        node_is_not_floating=1
       fi
+      old_window_list="$new_window_list"
+    fi
+
+    if [ "$prev_node_state" = "none" ]; then
+      prev_node_state=""
+    elif [ "$event" = "node_state" ] && [ -z "$prev_node_state" ]; then
+      # to determine first node_state
+      # when creating new floating node it will first trigger tiled off
+      prev_node_state="$node_state"
     fi
 
     if [ "$desktop_name" = "$selected_desktop" ] && [ "$node_is_not_floating" ]; then
