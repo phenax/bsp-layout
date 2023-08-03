@@ -7,7 +7,7 @@ source "$ROOT/utils/config.sh"
 
 master_size=$TALL_RATIO
 
-node_filter="!hidden"
+node_filter="!floating.!fullscreen.!hidden"
 
 # List[args] -> ()
 execute_layout() {
